@@ -207,7 +207,7 @@ Crea una nueva persona
     "apellido": "apellido",
     "fecha_nacimiento": "fecha_nacimiento",
     "cel": "cel",
-    "correp": "correo"
+    "correo": "correo"
 }
 ```
 * **Put:** /personas/{ci} 
@@ -220,7 +220,7 @@ Modifica la persona con el {ci}
     "apellido": "apellido",
     "fecha_nacimiento": "fecha_nacimiento",
     "cel": "cel",
-    "correp": "correo"
+    "correo": "correo"
 }
 ```
 * **Delete:** /personas/{ci} 
