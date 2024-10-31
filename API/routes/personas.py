@@ -1,22 +1,40 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+from fastapi import HTTPException
+from config.database import SessionLocal
 from config.db import connection
 from models.personas import model_persona
 from schemas.personas import Personas
 
 personas = APIRouter()
 
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 @personas.get("/personas")
-def get_personas():
-    result = connection.execute(model_persona.select()).fetchall()
-    return [dict(row._mapping) for row in result]
+def get_personas(db: Session = Depends(get_db)):
+    try:
+        result = db.execute(model_persona.select()).fetchall()
+        return [dict(row._mapping) for row in result]
+    except Exception as e:
+        connection.rollback()
+        return HTTPException(status_code=400, detail=str(e))
 
 @personas.get("/personas/{persona_ci}")
-def get_persona(persona_ci: int):
-    result = connection.execute(model_persona.select().where(model_persona.c.ci == persona_ci)).first()
-    return dict(result._mapping)
+def get_persona(persona_ci: int, db: Session = Depends(get_db)):
+    try:
+        result = db.execute(model_persona.select().where(model_persona.c.ci == persona_ci)).first()
+        return dict(result._mapping)
+    except Exception as e:
+        connection.rollback()
+        return HTTPException(status_code=400, detail=str(e))
 
 @personas.post("/personas")
-def create_persona(persona: Personas):
+def create_persona(persona: Personas, db: Session = Depends(get_db)):
     new_pesrona = {
         "ci": persona.ci,
         "id_rol": persona.id_rol,
@@ -26,12 +44,16 @@ def create_persona(persona: Personas):
         "cel": persona.cel,
         "correo": persona.correo
     }
-    connection.execute(model_persona.insert().values(new_pesrona))
-    connection.commit()
-    return {"message": "Persona creada exitosamente"}
+    try:
+        db.execute(model_persona.insert().values(new_pesrona))
+        db.commit()
+        return {"message": "Persona creada exitosamente"}
+    except Exception as e:
+        connection.rollback()
+        return HTTPException(status_code=400, detail=str(e))
 
 @personas.put("/personas/{persona_ci}")
-def update_persona(persona_ci: int, persona1: Personas):
+def update_persona(persona_ci: int, persona1: Personas, db: Session = Depends(get_db)):
     new_pesrona = {
         "ci": persona1.ci,
         "id_rol": persona1.id_rol,
@@ -41,12 +63,20 @@ def update_persona(persona_ci: int, persona1: Personas):
         "cel": persona1.cel,
         "correo": persona1.correo
     }
-    connection.execute(model_persona.update().values(new_pesrona).where(model_persona.c.ci == persona_ci))
-    connection.commit()
-    return {"message": "Persona actualizada exitosamente"}
+    try:
+        db.execute(model_persona.update().values(new_pesrona).where(model_persona.c.ci == persona_ci))
+        db.commit()
+        return {"message": "Persona actualizada exitosamente"}
+    except Exception as e:
+        connection.rollback()
+        return HTTPException(status_code=400, detail=str(e))
 
 @personas.delete("/personas/{persona_ci}")
-def delete_persona(persona_ci: int):
-    connection.execute(model_persona.delete().where(model_persona.c.ci == persona_ci))
-    connection.commit()
-    return {"message": "Persona eliminada exitosamente"}
+def delete_persona(persona_ci: int, db: Session = Depends(get_db)):
+    try:
+        db.execute(model_persona.delete().where(model_persona.c.ci == persona_ci))
+        db.commit()
+        return {"message": "Persona eliminada exitosamente"}
+    except Exception as e:
+        connection.rollback()
+        return HTTPException(status_code=400, detail=str(e))
