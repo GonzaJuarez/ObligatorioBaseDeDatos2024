@@ -5,6 +5,7 @@ from config.database import SessionLocal
 from config.db import connection
 from models.login import model_login
 from schemas.login import Login
+from config.hashing import Hasher
 
 login = APIRouter()
 
@@ -37,7 +38,7 @@ def get_login_ci(ci: str, db: Session = Depends(get_db)):
 def create_login(login1: Login, db: Session = Depends(get_db)):
     new_login = {
         "ci": login1.ci,
-        "contraseña": login1.contraseña
+        "contraseña": Hasher.get_password_hash(login1.contraseña)
     }
     try:
         result = db.execute(model_login.insert().values(new_login))
@@ -52,7 +53,7 @@ def create_login(login1: Login, db: Session = Depends(get_db)):
 def update_login(ci: str, login1: Login, db: Session = Depends(get_db)):
     new_login = {
         "ci": login1.ci,
-        "contraseña": login1.contraseña
+        "contraseña": Hasher.get_password_hash(login1.contraseña)
     }
     try:
         db.execute(model_login.update().where(model_login.c.ci == ci).values(new_login))

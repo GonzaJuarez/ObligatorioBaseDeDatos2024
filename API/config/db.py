@@ -10,6 +10,7 @@ from models.personas import model_persona
 from models.roles import model_roles
 from models.turnos import model_turno
 
+
 try:
     with engine.connect() as connection:
         print("Conexión exitosa a la base de datos.")

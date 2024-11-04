@@ -11,7 +11,6 @@ from routes.turnos import turnos
 
 from config.data_insert import insert_data
 
-
 app = FastAPI()
 
 insert_data()
@@ -24,6 +23,7 @@ app.include_router(login)
 app.include_router(personas)
 app.include_router(Roles)
 app.include_router(turnos)
+
 
 @app.get("/")
 def api():

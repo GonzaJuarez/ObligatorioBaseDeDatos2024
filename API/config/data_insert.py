@@ -1,8 +1,5 @@
 from config.db import connection, meta, engine
 
-import dotenv
-import os
-
 from models.actividades import model_actividad
 from models.alumno_clase import model_alumno_clase
 from models.clase import model_clase
@@ -12,15 +9,9 @@ from models.personas import model_persona
 from models.roles import model_roles
 from models.turnos import model_turno
 
-dotenv.load_dotenv()
+from config.hashing import Hasher
 
-ADMIN_CI = os.getenv("ADMIN_CI")
-ADMIN_NOMBRE = os.getenv("ADMIN_NOMBRE")
-ADMIN_APELLIDO = os.getenv("ADMIN_APELLIDO")
-AMDIN_FECHA_NAC = os.getenv("ADMIN_FECHA_NAC")
-ADMIN_CEL = os.getenv("ADMIN_CEL")
-ADMIN_CORREO = os.getenv("ADMIN_CORREO")
-ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
+from env import ADMIN_CI, ADMIN_NOMBRE, ADMIN_APELLIDO, AMDIN_FECHA_NAC, ADMIN_CEL, ADMIN_CORREO, ADMIN_PASSWORD
 
 def insert_data():
     with engine.begin() as connection:
@@ -50,7 +41,7 @@ def insert_data():
             )
 
         if connection.execute(model_login.select().where(model_login.c.ci == ADMIN_CI)).first() is None:
-            connection.execute(model_login.insert().values({"ci": ADMIN_CI, "contraseña": ADMIN_PASSWORD}))
+            connection.execute(model_login.insert().values({"ci": ADMIN_CI, "contraseña": Hasher.get_password_hash(ADMIN_PASSWORD)}))
 
         if connection.execute(model_actividad.select().where(model_actividad.c.descripcion == "Snowboard")).first() is None:
             connection.execute(model_actividad.insert().values({"descripcion": "Snowboard", "costo": 200}))
