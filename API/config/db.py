@@ -1,14 +1,13 @@
-from config.database import engine, meta
-from config.create_database import *
+from API.config.database import engine, meta
 
-from models.actividades import model_actividad
-from models.alumno_clase import model_alumno_clase
-from models.clase import model_clase
-from models.equipamiento import model_equipamiento
-from models.login import model_login
-from models.personas import model_persona
-from models.roles import model_roles
-from models.turnos import model_turno
+from API.models.actividades import model_actividad
+from API.models.alumno_clase import model_alumno_clase
+from API.models.clase import model_clase
+from API.models.equipamiento import model_equipamiento
+from API.models.login import model_login
+from API.models.personas import model_persona
+from API.models.roles import model_roles
+from API.models.turnos import model_turno
 
 
 try:

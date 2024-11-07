@@ -1,16 +1,6 @@
-from sqlalchemy import create_engine, MetaData
 import pymysql
-import os
-import dotenv
-from config.database import engine
 
-dotenv.load_dotenv()
-
-MYSQL_USER = os.getenv("MYSQL_USER")
-MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD")
-MYSQL_HOST = os.getenv("MYSQL_HOST")
-MYSQL_PORT = os.getenv("MYSQL_PORT")
-MYSQL_DATABASE = os.getenv("MYSQL_DATABASE")
+from API.env import MYSQL_USER, MYSQL_PASSWORD, MYSQL_HOST, MYSQL_PORT, MYSQL_DATABASE
 
 connection = pymysql.connect(
     host=MYSQL_HOST,

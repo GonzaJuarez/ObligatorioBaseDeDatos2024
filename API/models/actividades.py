@@ -1,5 +1,5 @@
 from sqlalchemy import Table, Column, Integer, String, Float
-from config.database import meta
+from API.config.database import meta
 
 model_actividad = Table("actividades", meta,
                  Column ("id", Integer, primary_key=True, autoincrement=True),

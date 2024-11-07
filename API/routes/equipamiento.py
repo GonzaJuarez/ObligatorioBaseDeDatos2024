@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from config.database import SessionLocal
-from config.db import connection
-from models.equipamiento import model_equipamiento
-from schemas.equipamiento import Equipamiento
+from API.config.database import SessionLocal
+from API.config.db import connection
+from API.models.equipamiento import model_equipamiento
+from API.schemas.equipamiento import Equipamiento
 
 equipamiento = APIRouter()
 

@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+
 class Personas(BaseModel):
     ci: str
     id_rol: str

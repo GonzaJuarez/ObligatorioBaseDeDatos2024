@@ -1,15 +1,15 @@
 from fastapi import FastAPI
 
-from routes.actividades import actividades
-from routes.alumno_clase import alumno_clase
-from routes.clase import clases
-from routes.equipamiento import equipamiento
-from routes.login import login
-from routes.personas import personas
-from routes.roles import Roles
-from routes.turnos import turnos
+from API.routes.actividades import actividades
+from API.routes.alumno_clase import alumno_clase
+from API.routes.clase import clases
+from API.routes.equipamiento import equipamiento
+from API.routes.login import login
+from API.routes.personas import personas
+from API.routes.roles import Roles
+from API.routes.turnos import turnos
 
-from config.data_insert import insert_data
+from API.config.data_insert import insert_data
 
 app = FastAPI()
 

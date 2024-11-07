@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from config.database import SessionLocal
-from config.db import connection
-from models.roles import model_roles
-from schemas.roles import Rol
+from API.config.database import SessionLocal
+from API.config.db import connection
+from API.models.roles import model_roles
+from API.schemas.roles import Rol
 
 Roles = APIRouter()
 

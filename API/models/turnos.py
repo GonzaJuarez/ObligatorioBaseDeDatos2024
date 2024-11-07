@@ -1,5 +1,5 @@
 from sqlalchemy import Table, Column, Integer, Date
-from config.database import meta
+from API.config.database import meta
 
 
 model_turno = Table("turnos", meta,
