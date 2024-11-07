@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from config.database import SessionLocal
-from config.db import connection
-from models.alumno_clase import model_alumno_clase
-from schemas.alumno_clase import Alumno_clase
+from API.config.database import SessionLocal
+from API.config.db import connection
+from API.models.alumno_clase import model_alumno_clase
+from API.schemas.alumno_clase import Alumno_clase
 
 alumno_clase = APIRouter()
 

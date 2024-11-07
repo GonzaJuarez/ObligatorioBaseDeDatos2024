@@ -1,5 +1,5 @@
 from sqlalchemy import Table, Column, Integer, ForeignKey
-from config.database import meta
+from API.config.database import meta
 
 
 model_alumno_clase = Table("alumno_clase", meta,

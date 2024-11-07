@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from config.database import SessionLocal
-from config.db import connection
-from models.turnos import model_turno
-from schemas.turnos import Turno
+from API.config.database import SessionLocal
+from API.config.db import connection
+from API.models.turnos import model_turno
+from API.schemas.turnos import Turno
 
 turnos = APIRouter()
 

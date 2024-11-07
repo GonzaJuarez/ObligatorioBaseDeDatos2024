@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 
+
 class Clase(BaseModel):
     id: Optional[int] = None
     ci_instructor: int

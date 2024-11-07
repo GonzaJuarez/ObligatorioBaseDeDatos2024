@@ -1,5 +1,5 @@
 from sqlalchemy import Table, Column, Integer, String, Float, ForeignKey
-from config.database import meta
+from API.config.database import meta
 
 
 model_equipamiento = Table("equipamiento", meta,
