@@ -17,10 +17,6 @@ git clone https://github.com/GonzaJuarez/ObligatorioBaseDeDatos2024.git
 ```
 2. Abrir Docker Desktop <br><br>
 3. Abrir la carpeta base del proyecto en una terminal <br><br>
-4. Moverse a la carpeta DataBase:
-```
-cd DataBase
-```
 5. Buildear el contenedor de Docker:
 ```
 docker-compose build
@@ -28,27 +24,6 @@ docker-compose build
 6. Levantar el contenedor de Docker:
 ```
 docker-compose up
-```
-7. Abrir la carpeta base del proyecto en otra terminal <br><br>
-8. Crear un entorno virtual:
-```
-python -m venv env 
-```
-9. Activar el entorno virtual:
-```
-env\Scripts\activate
-```
-10. Instalar las dependencias:
-```
-pip install -r requirements.txt
-```
-11. Moverse a la carpeta Api:
-```
-cd Api
-```
-12. Levantar el servidor:
-```
-uvicorn app:app --reload
 ```
 
 ### Endpoints
