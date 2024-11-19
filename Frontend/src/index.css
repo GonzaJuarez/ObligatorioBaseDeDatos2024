@@ -1,0 +1,92 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: #e1e1e1; /* Slightly softened white for better contrast */
+  background-color: #1e1e2f;
+
+  --primary-accent: #ff8c42; /* Muted orange */
+  --secondary-accent: #4b82c3; /* Softer blue tone to replace the previous sky blue */
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: var(--secondary-accent);
+  text-decoration: inherit;
+}
+a:hover {
+  color: #3a6da1; /* Darker blue for a hover effect */
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background: radial-gradient(circle, #1e1e2f, #141418);
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+  color: var(--secondary-accent);
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: var(--primary-accent);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.25s, transform 0.1s;
+  margin: 0.5em;
+}
+button:hover {
+  background-color: #e6772e;
+  transform: scale(1.05);
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #2d2d2d;
+    background-color: #ffffff;
+
+    --primary-accent: #ff7b33;
+    --secondary-accent: #508acb; /* A soft but lively blue for light mode */
+  }
+  a {
+    color: var(--secondary-accent);
+  }
+  a:hover {
+    color: #3a6da1;
+  }
+  body {
+    background: radial-gradient(circle, #ffffff, #e8e8e8);
+  }
+  h1 {
+    color: var(--secondary-accent);
+  }
+  button {
+    background-color: #ff7b33;
+    color: #ffffff;
+  }
+  button:hover {
+    background-color: #e66722;
+  }
+}
