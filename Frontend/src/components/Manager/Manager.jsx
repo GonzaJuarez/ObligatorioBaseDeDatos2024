@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-//import './Modal.css';
+import './Modal.css';
 import categoryConfig from './categoryConfig'; // Importar la configuración de categorías
 
 const Modal = ({ isOpen, onClose, category }) => {
@@ -22,16 +22,26 @@ const Modal = ({ isOpen, onClose, category }) => {
       );
     }
 
-    const fields = categoryConfig[category]?.[step];
-    if (!fields) return null;
+    console.log('category:', category);
+    const fields = categoryConfig[category.toLowerCase()]?.[step];
+    console.log('fields:', fields);
+
+    if (!fields || fields.length === 0) {
+      return (
+        <div>
+          <p>No se encontraron campos para {step} {category}.</p>
+          <button onClick={() => setStep('selectAction')}>Atrás</button>
+        </div>
+      );
+    }
 
     return (
       <div>
         <h2>{step === 'create' ? 'Crear' : step === 'modify' ? 'Modificar' : 'Eliminar'} {category}</h2>
         <form>
           {fields.map((field) => (
-            <div key={field.key}>
-              <label>{field.label}</label>
+            <div key={field.key} className="form-row">
+              <label>{field.label}:</label>
               <input type={field.type} placeholder={field.label} />
             </div>
           ))}

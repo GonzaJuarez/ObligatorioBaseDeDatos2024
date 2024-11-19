@@ -1,26 +1,23 @@
-import { useState } from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import Home from './components/Home.jsx'
-import Login from './components/Login.jsx'
-import Alumnos from './components/Alumnos.jsx'
-import Profesores from './components/Profesores.jsx'
-import Admin from './components/Admin.jsx'
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import Login from './components/Login/Login.jsx'
+import Alumnos from './components/Alumnos/Alumnos.jsx'
+import Profesores from './components/Profesores/Profesores.jsx'
+import Admin from './components/Admin/Admin.jsx'
 import './App.css'
 
 function App() {
 
   return (
-    <div>
-      <Router>
-        <Switch>
-          <Route path="/" exact component={Home} />
-          <Route path="/login" component={Login} />
-          <Route path="/alumnos" component={Alumnos} />
-          <Route path="/profesores" component={Profesores} />
-          <Route path="/admin" component={Admin} />
-        </Switch>
-      </Router>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Navigate to="/Login"/>}/>
+        <Route path="/login" element={<Login />} />
+        <Route path="/alumnos" element={<Alumnos />} />
+        <Route path="/profesores" element={<Profesores />} />
+        <Route path="/admin" element={<Admin />} />
+      </Routes>
+    </Router>
   )
     
 }
