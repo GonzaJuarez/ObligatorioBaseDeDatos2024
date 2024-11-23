@@ -1,54 +1,127 @@
 from API.config.db import connection, meta, engine
-
-from API.models.actividades import model_actividad
-from API.models.alumno_clase import model_alumno_clase
-from API.models.clase import model_clase
-from API.models.equipamiento import model_equipamiento
-from API.models.login import model_login
-from API.models.personas import model_persona
-from API.models.roles import model_roles
-from API.models.turnos import model_turno
+from sqlalchemy import text
 
 from API.config.hashing import Hasher
 
 from API.env import ADMIN_CI, ADMIN_NOMBRE, ADMIN_APELLIDO, AMDIN_FECHA_NAC, ADMIN_CEL, ADMIN_CORREO, ADMIN_PASSWORD
 
+
 def insert_data():
-    with engine.begin() as connection:
-        if connection.execute(model_roles.select().where(model_roles.c.descripcion == "Administrador")).first() is None:
-            connection.execute(model_roles.insert().values({"descripcion": "Administrador"}))
+    with (engine.begin() as connection):
+        # Roles
+        connection.execute(text("REPLACE INTO roles (descripcion) VALUES ('Administrador')"))
+        connection.execute(text("REPLACE INTO roles (descripcion) VALUES ('Instructor')"))
+        connection.execute(text("REPLACE INTO roles (descripcion) VALUES ('Alumno')"))
 
-        if connection.execute(model_roles.select().where(model_roles.c.descripcion == "Instructor")).first() is None:
-            connection.execute(model_roles.insert().values({"descripcion": "Instructor"}))
+        # Administrador
+        admin_rol_id = connection.execute(text("SELECT * FROM roles WHERE descripcion = 'Administrador'")).first()[
+            0]
+        admin = {
+            "ci": ADMIN_CI,
+            "id_rol": admin_rol_id,
+            "nombre": ADMIN_NOMBRE,
+            "apellido": ADMIN_APELLIDO,
+            "fecha_nacimiento": AMDIN_FECHA_NAC,
+            "cel": ADMIN_CEL,
+            "correo": ADMIN_CORREO
+        }
+        connection.execute(
+            text("""
+                INSERT INTO personas (ci, id_rol, nombre, apellido, fecha_nacimiento, cel, correo)
+                VALUES (:ci, :id_rol, :nombre, :apellido, :fecha_nacimiento, :cel, :correo)
+                ON DUPLICATE KEY UPDATE
+                    id_rol = VALUES(id_rol),
+                    nombre = VALUES(nombre),
+                    apellido = VALUES(apellido),
+                    fecha_nacimiento = VALUES(fecha_nacimiento),
+                    cel = VALUES(cel),
+                    correo = VALUES(correo);
+            """), admin)
 
-        if connection.execute(model_roles.select().where(model_roles.c.descripcion == "Alumno")).first() is None:
-            connection.execute(model_roles.insert().values({"descripcion": "Alumno"}))
+        # Login Administrador
+        connection.execute(
+            text("""
+                REPLACE INTO login (ci, contraseña)
+                VALUES (:ci, :password)
+            """), {"ci": ADMIN_CI, "password": Hasher.get_password_hash(ADMIN_PASSWORD)})
 
-        if connection.execute(model_persona.select().where(model_persona.c.ci == ADMIN_CI)).first() is None:
-            admin_role_id = connection.execute(
-                model_roles.select().where(model_roles.c.descripcion == "Administrador")
-            ).first().id
-            connection.execute(
-                model_persona.insert().values({
-                    "ci": ADMIN_CI,
-                    "id_rol": admin_role_id,
-                    "nombre": ADMIN_NOMBRE,
-                    "apellido": ADMIN_APELLIDO,
-                    "fecha_nacimiento": AMDIN_FECHA_NAC,
-                    "cel": ADMIN_CEL,
-                    "correo": ADMIN_CORREO
-                })
-            )
+        # Actividades
+        connection.execute(text("REPLACE INTO actividades (descripcion, costo) VALUES ('Snowboard', 200)"))
+        connection.execute(text("REPLACE INTO actividades (descripcion, costo) VALUES ('Sky', 200)"))
+        connection.execute(text("REPLACE INTO actividades (descripcion, costo) VALUES ('Moto de Nieve', 200)"))
 
-        if connection.execute(model_login.select().where(model_login.c.ci == ADMIN_CI)).first() is None:
-            connection.execute(model_login.insert().values({"ci": ADMIN_CI, "contraseña": Hasher.get_password_hash(ADMIN_PASSWORD)}))
+        # Equipamientos
+        actividad_snowboard_id = connection.execute(
+            text("SELECT * FROM actividades WHERE descripcion = 'Snowboard'")).first()[0]
+        actividad_sky_id = connection.execute(text("SELECT * FROM actividades WHERE descripcion = 'Sky'")).first()[0]
+        actividad_moto_de_nieve_id = connection.execute(
+            text("SELECT * FROM actividades WHERE descripcion = 'Moto de Nieve'")).first()[0]
 
-        if connection.execute(model_actividad.select().where(model_actividad.c.descripcion == "Snowboard")).first() is None:
-            connection.execute(model_actividad.insert().values({"descripcion": "Snowboard", "costo": 200}))
+        connection.execute(
+            text(f"""REPLACE INTO equipamiento (id_actividad, descripcion, costo)
+                VALUES ({actividad_snowboard_id}, 'Tabla de Snowboard', 50)
+                """))
 
-        if connection.execute(model_actividad.select().where(model_actividad.c.descripcion == "Sky")).first() is None:
-            connection.execute(model_actividad.insert().values({"descripcion": "Sky", "costo": 150}))
+        connection.execute(
+            text(f"""REPLACE INTO equipamiento (id_actividad, descripcion, costo)
+                VALUES ({actividad_snowboard_id}, 'Botas de Snowboard', 50)
+                """))
 
-        if connection.execute(model_actividad.select().where(model_actividad.c.descripcion == "Moto de Nieve")).first() is None:
-            connection.execute(model_actividad.insert().values({"descripcion": "Moto de Nieve", "costo": 100}))
+        connection.execute(
+            text(f"""REPLACE INTO equipamiento (id_actividad, descripcion, costo)
+                VALUES ({actividad_snowboard_id}, 'Casco de Snowboard', 50)
+                """))
+
+        connection.execute(
+            text(f"""REPLACE INTO equipamiento (id_actividad, descripcion, costo)
+                VALUES ({actividad_snowboard_id}, 'Lentes de Snowboard', 50)
+                """))
+
+        connection.execute(
+            text(f"""REPLACE INTO equipamiento (id_actividad, descripcion, costo)
+                VALUES ({actividad_sky_id}, 'Esquies', 50)
+                """))
+
+        connection.execute(
+            text(f"""REPLACE INTO equipamiento (id_actividad, descripcion, costo)
+                VALUES ({actividad_sky_id}, 'Botas de Sky', 50)
+                """))
+
+        connection.execute(
+            text(f"""REPLACE INTO equipamiento (id_actividad, descripcion, costo)
+                VALUES ({actividad_sky_id}, 'Casco de Sky', 50)
+                """))
+
+        connection.execute(
+            text(f"""REPLACE INTO equipamiento (id_actividad, descripcion, costo)
+                VALUES ({actividad_sky_id}, 'Lentes de Sky', 50)
+                """))
+
+        connection.execute(
+            text(f"""REPLACE INTO equipamiento (id_actividad, descripcion, costo)
+                VALUES ({actividad_moto_de_nieve_id}, 'Moto de Nieve', 100)
+                """))
+
+        connection.execute(
+            text(f"""REPLACE INTO equipamiento (id_actividad, descripcion, costo)
+                VALUES ({actividad_moto_de_nieve_id}, 'Casco de Moto de Nieve', 50)
+                """))
+
+        connection.execute(
+            text(f"""REPLACE INTO equipamiento (id_actividad, descripcion, costo)
+                VALUES ({actividad_moto_de_nieve_id}, 'Lentes de Moto de Nieve', 50)
+                """))
+
+        connection.execute(
+            text(f"""REPLACE INTO equipamiento (id_actividad, descripcion, costo)
+                VALUES ({actividad_moto_de_nieve_id}, 'Botas de Moto de Nieve', 50)
+                """))
+
+        # Turnos
+        connection.execute(text("REPLACE INTO turnos (hora_inicio, hora_fin) VALUES ('09:00:00', '10:00:00')"))
+        connection.execute(text("REPLACE INTO turnos (hora_inicio, hora_fin) VALUES ('10:00:00', '11:00:00')"))
+        connection.execute(text("REPLACE INTO turnos (hora_inicio, hora_fin) VALUES ('11:00:00', '12:00:00')"))
+
+
+
         connection.commit()
