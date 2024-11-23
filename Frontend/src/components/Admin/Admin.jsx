@@ -12,6 +12,8 @@ function Admin() {
         <Manager category="Turnos" />
         <Manager category="Actividades" />
         <Manager category="Alumnos" />
+        <Manager category="Equipamiento" />
+        <button onClick={() => {} }>Ver Reportes</button>
     </div>
   );
 }
