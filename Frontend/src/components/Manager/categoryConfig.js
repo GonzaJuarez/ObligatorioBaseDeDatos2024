@@ -1,9 +1,13 @@
 const categoryConfig = {
     instructores: {
         create: [
+            { key: 'ci', label: 'CI', type: 'number' },
+            { key: 'rol', label: 'Rol', type: 'number' },
             { key: 'nombre', label: 'Nombre', type: 'text' },
-            { key: 'apellido', label: 'Apellido', type: 'text' },
-            { key: 'ci', label: 'CI', type: 'text' },
+            { key: 'apellido', label: 'Apellido', type: 'text'},
+            { key: 'fechaNacimiento', label: 'Fecha de Nacimiento', type: 'date' },
+            { key: 'celular', label: 'Cel', type: 'number'},
+            { key: 'correo', label: 'Correo', type: 'text'}
         ],
         modify: [
             { key: 'ci', label: 'CI del Instructor a Modificar', type: 'text' },
