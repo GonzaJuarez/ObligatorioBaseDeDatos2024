@@ -2,10 +2,10 @@ from pydantic import BaseModel
 
 
 class Personas(BaseModel):
-    ci: str
-    id_rol: str
+    ci: int
+    id_rol: int
     nombre: str
     apellido: str
     fecha_nacimiento: str
-    cel: str
+    cel: int
     correo: str

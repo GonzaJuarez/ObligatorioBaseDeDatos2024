@@ -3,5 +3,5 @@ from typing import Optional
 
 
 class Login(BaseModel):
-    ci: str
+    ci: int
     contraseña: str

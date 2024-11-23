@@ -1,12 +1,13 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import text
 from sqlalchemy.orm import Session
-from fastapi import HTTPException
 from API.config.database import SessionLocal
 from API.config.db import connection
-from API.models.clase import model_clase
 from API.schemas.clase import Clase
 
+
 clases = APIRouter()
+
 
 def get_db():
     db = SessionLocal()
@@ -15,26 +16,43 @@ def get_db():
     finally:
         db.close()
 
+
 @clases.get("/clases")
-async def get_clases(db: Session = Depends(get_db)):
+def get_clases(db: Session = Depends(get_db)):
     try:
-        result = db.execute(model_clase.select()).fetchall()
+        result = db.execute(text("SELECT * FROM clase"))
         return [dict(row._mapping) for row in result]
     except Exception as e:
         connection.rollback()
-        return HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=f"Error: {str(e)}")
+
 
 @clases.get("/clases/{id_clase}")
-def get_clase_id(id_clase: str, db: Session = Depends(get_db)):
+def get_clase_id(id_clase: int, db: Session = Depends(get_db)):
+    if not isinstance(id_clase, int):
+        raise HTTPException(status_code=400, detail="El id_clase debe ser un número entero.")
     try:
-        result = db.execute(model_clase.select().where(model_clase.c.id == id_clase)).first()
-        return dict(result._mapping)
+        result = db.execute(
+            text("SELECT * FROM clase WHERE id = :id_clase"),
+            {"id_clase": id_clase}
+        ).first()
+        return dict(result._mapping) if result else None
     except Exception as e:
         connection.rollback()
-        return HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=f"Error: {str(e)}")
+
 
 @clases.post("/clases")
 def create_clase(clase: Clase, db: Session = Depends(get_db)):
+    if not isinstance(clase.ci_instructor, int):
+        raise HTTPException(status_code=400, detail="El ci_instructor debe ser un número entero.")
+    if not isinstance(clase.id_actividad, int):
+        raise HTTPException(status_code=400, detail="El id_actividad debe ser un número entero.")
+    if not isinstance(clase.id_turno, int):
+        raise HTTPException(status_code=400, detail="El id_turno debe ser un número entero.")
+    if not isinstance(clase.dictada, bool):
+        raise HTTPException(status_code=400, detail="El campo dictada debe ser un valor booleano.")
+
     new_clase = {
         "ci_instructor": clase.ci_instructor,
         "id_actividad": clase.id_actividad,
@@ -42,37 +60,73 @@ def create_clase(clase: Clase, db: Session = Depends(get_db)):
         "dictada": clase.dictada
     }
     try:
-        result = db.execute(model_clase.insert().values(new_clase))
+        db.execute(
+            text("""
+                INSERT INTO clase (ci_instructor, id_actividad, id_turno, dictada) 
+                VALUES (:ci_instructor, :id_actividad, :id_turno, :dictada)
+            """),
+            new_clase
+        )
         db.commit()
-        print(result)
         return {"message": "Clase creada exitosamente"}
     except Exception as e:
         connection.rollback()
-        return HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=f"Error al crear la clase: {str(e)}")
+
 
 @clases.put("/clases/{id_clase}")
-def update_clase(id_clase: str, clase: Clase, db: Session = Depends(get_db)):
-    new_clase = {
-        "id": id_clase,
+def update_clase(id_clase: int, clase: Clase, db: Session = Depends(get_db)):
+    if not isinstance(id_clase, int):
+        raise HTTPException(status_code=400, detail="El id_clase debe ser un número entero.")
+    if not isinstance(clase.ci_instructor, int):
+        raise HTTPException(status_code=400, detail="El ci_instructor debe ser un número entero.")
+    if not isinstance(clase.id_actividad, int):
+        raise HTTPException(status_code=400, detail="El id_actividad debe ser un número entero.")
+    if not isinstance(clase.id_turno, int):
+        raise HTTPException(status_code=400, detail="El id_turno debe ser un número entero.")
+    if not isinstance(clase.dictada, bool):
+        raise HTTPException(status_code=400, detail="El campo dictada debe ser un valor booleano.")
+
+    updated_clase = {
+        "id_clase": id_clase,
         "ci_instructor": clase.ci_instructor,
         "id_actividad": clase.id_actividad,
         "id_turno": clase.id_turno,
         "dictada": clase.dictada
     }
     try:
-        db.execute(model_clase.update().where(model_clase.c.id == id_clase).values(new_clase))
+        db.execute(
+            text("""
+                UPDATE clase
+                SET ci_instructor = :ci_instructor, 
+                    id_actividad = :id_actividad, 
+                    id_turno = :id_turno, 
+                    dictada = :dictada
+                WHERE id = :id_clase
+            """),
+            updated_clase
+        )
         db.commit()
         return {"message": "Clase actualizada exitosamente"}
     except Exception as e:
         connection.rollback()
-        return HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=f"Error al actualizar la clase: {str(e)}")
+
 
 @clases.delete("/clases/{id_clase}")
-def delete_clase(id_clase: str, db: Session = Depends(get_db)):
+def delete_clase(id_clase: int, db: Session = Depends(get_db)):
+    if not isinstance(id_clase, int):
+        raise HTTPException(status_code=400, detail="El id_clase debe ser un número entero.")
     try:
-        db.execute(model_clase.delete().where(model_clase.c.id == id_clase))
+        db.execute(
+            text("""
+                DELETE FROM clase
+                WHERE id = :id_clase
+            """),
+            {"id_clase": id_clase}
+        )
         db.commit()
         return {"message": "Clase eliminada exitosamente"}
     except Exception as e:
         connection.rollback()
-        return HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=f"Error al eliminar la clase: {str(e)}")
