@@ -1,4 +1,6 @@
 import React from 'react'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import Login from './components/Login/Login.jsx'
 import Alumnos from './components/Alumnos/Alumnos.jsx'
@@ -17,6 +19,7 @@ function App() {
         <Route path="/profesores" element={<Profesores />} />
         <Route path="/admin" element={<Admin />} />
       </Routes>
+      <ToastContainer />
     </Router>
   )
     

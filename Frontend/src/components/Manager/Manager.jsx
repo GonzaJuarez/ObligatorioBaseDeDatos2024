@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import './Manager.css';
-import categoryConfig from './categoryConfig'; // Importar la configuración de categorías
+import categoryConfig from './categoryConfig';
+
+const roleIds = {
+  administradores: 1,
+  instructores: 2,
+  alumnos: 3,
+};
 import { apiURL } from '../../const';
 import { debounce } from 'lodash';
 import { toast } from 'react-toastify';
@@ -12,32 +18,68 @@ const headers = {
 };
 
 const Modal = ({ isOpen, onClose, category }) => {
-  const [step, setStep] = useState('selectAction'); // Mantiene el seguimiento de la parte del modal en la que se encuentra el usuario
-  const [formData, setFormData] = useState({}); // Estado para manejar los datos del formulario
+  const [step, setStep] = useState('selectAction');
+  const [subStep, setSubStep] = useState('inputId');
+  const [viewItems, setViewItems] = useState([]);
+  const [formData, setFormData] = useState(() => {
+    const initialData = {};
+    if (categoryConfig[category.toLowerCase()]?.create) {
+      categoryConfig[category.toLowerCase()].create.forEach(field => {
+        initialData[field.key] = field.type === 'number' ? 0 : '';
+      });
+    }
+    return initialData;
+  });
 
   const handleClose = () => {
-    setStep('selectAction'); // Restablece el paso al cerrar el modal
-    setFormData({}); // Limpiar el formulario al cerrar el modal
+    setStep('selectAction');
+    setFormData({});
     onClose();
   };
 
-  const handleInputChange = debounce((e) => {
-    const { name, value } = e.target;
+  const handleShowById = async () => {
+    try {
+      const url = `${apiURL}${category.toLowerCase()}`;
+      console.log('Fetching data from:', url);
+      const response = await fetch(url, {
+        headers,
+        method: 'GET',
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setStep('viewItems');
+        setViewItems(Array.isArray(data) ? data : []);
+      } else {
+        toast.error('No se pudieron obtener los elementos del servidor.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('Error al conectar con el servidor, por favor intenta nuevamente más tarde.');
+    }
+  };
+  
+
+  const handleInputChange = (e) => {
+    const { name, value, type } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: type === 'number' ? parseFloat(value) || 0 : value,
     }));
-  }, 300);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (['alumnos', 'instructores', 'administradores'].includes(category.toLowerCase()) && step === 'create') {
+      formData.id_rol = roleIds[category.toLowerCase()];
+    }
+    if (formData.ci && !/^[0-9]{8}$/.test(formData.ci)) {
+      toast.error('El campo CI debe tener exactamente 8 dígitos');
+      return;
+    }
+    console.log('Submitting form with data:', formData);
     try {
       let response;
-      let url = `${apiURL}/personas`.replace(/([^:]\/)\/+/g, "$1");
-
-      if (['Alumnos', 'Instructores', 'Administradores'].includes(category.toLowerCase()) && step === 'create') {
-        formData.id_rol = category.slice(0, -1); // Assign role based on category
-      }
+      const url = `${apiURL}/personas/${step === 'delete' ? formData.ci : ''}`.replace(/\/\/+/, '/');
 
       let options = {
         headers,
@@ -53,8 +95,20 @@ const Modal = ({ isOpen, onClose, category }) => {
           });
           break;
         case 'modify':
-          if (!formData.ci) {
-            toast.error('El CI es obligatorio para modificar un registro');
+          if (subStep === 'inputId') {
+            response = await fetch(`${url}/${formData.ci}`, {
+              ...options,
+              method: 'GET',
+            });
+            if (response.ok) {
+              const data = await response.json();
+              setFormData(data);
+              setSubStep('modifyFields');
+            } else {
+              const errorData = await response.json();
+              console.error('Error fetching data:', errorData);
+              toast.error('No se pudo obtener la información del registro, verifica el CI.');
+            }
             return;
           }
           response = await fetch(`${url}/${formData.ci}`, {
@@ -64,10 +118,6 @@ const Modal = ({ isOpen, onClose, category }) => {
           });
           break;
         case 'delete':
-          if (!formData.ci) {
-            toast.error('El CI es obligatorio para eliminar un registro');
-            return;
-          }
           response = await fetch(`${url}/${formData.ci}`, {
             ...options,
             method: 'DELETE',
@@ -83,6 +133,7 @@ const Modal = ({ isOpen, onClose, category }) => {
         handleClose();
       } else {
         const errorData = await response.json();
+        console.error('Error Response Data:', errorData);
         toast.error(`Error: ${errorData.detail || 'Error al realizar la acción, por favor verifica los datos'}`);
       }
     } catch (error) {
@@ -102,9 +153,59 @@ const Modal = ({ isOpen, onClose, category }) => {
         </div>
       );
     }
+  
+    if (step === 'modify' && subStep === 'inputId') {
+      const firstField = categoryConfig[category.toLowerCase()]?.modify[0];
+      return (
+        <div>
+          <h2>Modificar {category}</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="form-row">
+              <label>{firstField?.label}</label>
+              <input
+                type={firstField?.type}
+                name={firstField?.key}
+                placeholder={firstField?.label}
+                value={formData[firstField?.key] || ''}
+                onChange={handleInputChange}
+              />
+            </div>
+            <button type="submit">Enviar</button>
+          </form>
+          <button onClick={handleShowById}>Mostrar todos los elementos</button>
+          <button onClick={() => setStep('selectAction')}>Atrás</button>
+        </div>
+      );
+    }
+    
 
+    if (step === 'viewItems') {
+      return (
+        <div>
+          <h2>Lista de {category}</h2>
+          <ul>
+            {viewItems.length > 0 ? (
+              viewItems.map((item) => (
+                <li key={item.id}>
+                  {Object.entries(item).map(([key, value]) => (
+                    <div key={key}>
+                      <strong>{key}:</strong> {value}
+                    </div>
+                  ))}
+                </li>
+              ))
+            ) : (
+              <li>No se encontraron elementos</li>
+            )}
+          </ul>
+          <button onClick={() => setStep('selectAction')}>Atrás</button>
+        </div>
+      );
+    }    
+    
+  
     const fields = categoryConfig[category.toLowerCase()]?.[step];
-
+  
     if (!fields || fields.length === 0) {
       return (
         <div>
@@ -113,7 +214,7 @@ const Modal = ({ isOpen, onClose, category }) => {
         </div>
       );
     }
-
+  
     return (
       <div>
         <h2>{step === 'create' ? 'Crear' : step === 'modify' ? 'Modificar' : 'Eliminar'} {category}</h2>
@@ -136,6 +237,7 @@ const Modal = ({ isOpen, onClose, category }) => {
       </div>
     );
   };
+  
 
   return (
     <CSSTransition in={isOpen} timeout={300} classNames="modal" unmountOnExit>
@@ -160,4 +262,4 @@ const Manager = ({ category }) => {
   );
 };
 
-export default Manager;
+export default Manager
