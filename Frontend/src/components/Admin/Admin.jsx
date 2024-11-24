@@ -1,6 +1,5 @@
 import React from 'react';
 import Manager from '../Manager/Manager';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { apiURL } from '../../const';
 
 
@@ -13,7 +12,7 @@ function Admin() {
         <Manager category="Actividades" />
         <Manager category="Alumnos" />
         <Manager category="Equipamiento" />
-        <button onClick={() => {} }>Ver Reportes</button>
+        <button onClick={() => window.location.href = "/Admin/Reportes"}>Ver Reportes</button>
     </div>
   );
 }

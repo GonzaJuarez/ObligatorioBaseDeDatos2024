@@ -7,6 +7,7 @@ const roleIds = {
   instructores: 2,
   alumnos: 3,
 };
+
 import { apiURL } from '../../const';
 import { debounce } from 'lodash';
 import { toast } from 'react-toastify';
@@ -16,6 +17,13 @@ import { CSSTransition } from 'react-transition-group';
 const headers = {
   'Content-Type': 'application/json',
 };
+
+const convertSecondsToTime = (seconds) => {
+  const hours = Math.floor(seconds / 3600).toString().padStart(2, '0');
+  const minutes = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+  return `${hours}:${minutes}`;
+};
+
 
 const Modal = ({ isOpen, onClose, category }) => {
   const [step, setStep] = useState('selectAction');
@@ -39,14 +47,36 @@ const Modal = ({ isOpen, onClose, category }) => {
 
   const handleShowById = async () => {
     try {
-      const url = `${apiURL}${category.toLowerCase()}`;
+      let url = `${apiURL}${category.toLowerCase()}`;
+      if (['alumnos', 'instructores', 'administradores'].includes(category.toLowerCase())) {
+        url = `${apiURL}personas`;
+      }
       console.log('Fetching data from:', url);
       const response = await fetch(url, {
         headers,
         method: 'GET',
       });
       if (response.ok) {
-        const data = await response.json();
+        let data = await response.json();
+  
+        // Convertir los campos de tiempo si existen
+        if (Array.isArray(data)) {
+          data = data.map((item) => {
+            categoryConfig[category.toLowerCase()]?.modify.forEach(field => {
+              if (field.type === 'time' && typeof item[field.key] === 'number') {
+                item[field.key] = convertSecondsToTime(item[field.key]);
+              }
+            });
+            return item;
+          });
+        } else {
+          categoryConfig[category.toLowerCase()]?.modify.forEach(field => {
+            if (field.type === 'time' && typeof data[field.key] === 'number') {
+              data[field.key] = convertSecondsToTime(data[field.key]);
+            }
+          });
+        }
+  
         setStep('viewItems');
         setViewItems(Array.isArray(data) ? data : []);
       } else {
@@ -57,6 +87,7 @@ const Modal = ({ isOpen, onClose, category }) => {
       toast.error('Error al conectar con el servidor, por favor intenta nuevamente más tarde.');
     }
   };
+  
   
 
   const handleInputChange = (e) => {
@@ -69,23 +100,35 @@ const Modal = ({ isOpen, onClose, category }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (['alumnos', 'instructores', 'administradores'].includes(category.toLowerCase()) && step === 'create') {
+  
+    // Asignar id_rol si se está creando o modificando un usuario de tipo alumno, instructor o administrador
+    if (['alumnos', 'instructores', 'administradores'].includes(category.toLowerCase())) {
       formData.id_rol = roleIds[category.toLowerCase()];
     }
+  
     if (formData.ci && !/^[0-9]{8}$/.test(formData.ci)) {
       toast.error('El campo CI debe tener exactamente 8 dígitos');
       return;
     }
+  
     console.log('Submitting form with data:', formData);
+  
     try {
       let response;
-      const url = `${apiURL}/personas/${step === 'delete' ? formData.ci : ''}`.replace(/\/\/+/, '/');
-
+      let url = `${apiURL}${category.toLowerCase()}`;
+      if (['alumnos', 'instructores', 'administradores'].includes(category.toLowerCase())) {
+        url = `${apiURL}personas`;
+      }
+      if (step === 'modify' || step === 'delete') {
+        //add the first field's value to the url
+        url = `${url}/${formData[categoryConfig[category.toLowerCase()][step][0].key]}`;
+      }
+  
       let options = {
         headers,
         mode: 'cors',
       };
-
+  
       switch (step) {
         case 'create':
           response = await fetch(url, {
@@ -96,7 +139,7 @@ const Modal = ({ isOpen, onClose, category }) => {
           break;
         case 'modify':
           if (subStep === 'inputId') {
-            response = await fetch(`${url}/${formData.ci}`, {
+            response = await fetch(url, {
               ...options,
               method: 'GET',
             });
@@ -111,14 +154,14 @@ const Modal = ({ isOpen, onClose, category }) => {
             }
             return;
           }
-          response = await fetch(`${url}/${formData.ci}`, {
+          response = await fetch(url, {
             ...options,
             method: 'PUT',
             body: JSON.stringify(formData),
           });
           break;
         case 'delete':
-          response = await fetch(`${url}/${formData.ci}`, {
+          response = await fetch(url, {
             ...options,
             method: 'DELETE',
           });
@@ -127,7 +170,7 @@ const Modal = ({ isOpen, onClose, category }) => {
           console.error('Unsupported action');
           return;
       }
-
+  
       if (response.ok) {
         toast.success('Acción completada con éxito');
         handleClose();
@@ -141,6 +184,7 @@ const Modal = ({ isOpen, onClose, category }) => {
       toast.error('Error al conectar con el servidor, por favor intenta nuevamente más tarde.');
     }
   };
+  
 
   const renderContent = () => {
     if (step === 'selectAction') {
@@ -181,12 +225,20 @@ const Modal = ({ isOpen, onClose, category }) => {
 
     if (step === 'viewItems') {
       return (
-        <div>
+        <div className="modal-scrollable">
           <h2>Lista de {category}</h2>
           <ul>
             {viewItems.length > 0 ? (
               viewItems.map((item) => (
-                <li key={item.id}>
+                <li
+                  key={item.id}
+                  onClick={() => {
+                    setFormData(item); // Configura los datos del formulario con el elemento seleccionado
+                    setSubStep('modifyFields'); // Cambia al segundo sub-paso de modificación
+                    setStep('modify'); // Asegúrate de estar en el paso de modificar
+                  }}
+                  style={{ cursor: 'pointer', padding: '0.5rem', borderBottom: '1px solid #ccc' }} // Añadir estilo para que parezca clicable
+                >
                   {Object.entries(item).map(([key, value]) => (
                     <div key={key}>
                       <strong>{key}:</strong> {value}
@@ -201,7 +253,7 @@ const Modal = ({ isOpen, onClose, category }) => {
           <button onClick={() => setStep('selectAction')}>Atrás</button>
         </div>
       );
-    }    
+    }
     
   
     const fields = categoryConfig[category.toLowerCase()]?.[step];
