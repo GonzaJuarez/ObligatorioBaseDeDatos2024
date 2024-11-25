@@ -6,7 +6,6 @@ function Reportes() {
     const [dataAlumnos, setDataAlumnos] = useState(null);
     const [dataTurnos, setDataTurnos] = useState(null);
 
-    // Definir la función para obtener los datos
     const fetchActividadesMasGanancias = async () => {
         try {
             const response = await fetch(`${apiURL}actividades_mas_ganancias`, {
@@ -67,8 +66,6 @@ function Reportes() {
         }
     };
 
-
-    // Usar useEffect para llamar la función al montar el componente
     useEffect(() => {
         fetchActividadesMasGanancias();
         fetchTurnosMasDictados();

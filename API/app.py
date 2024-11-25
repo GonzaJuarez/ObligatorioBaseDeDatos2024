@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from routes.actividades import actividades
 from routes.alumno_clase import alumno_clases
@@ -13,6 +14,14 @@ from routes.reportes import reportes
 from config.data_insert import insert_data
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 insert_data()
 
@@ -30,3 +39,4 @@ app.include_router(reportes)
 @app.get("/")
 def api():
     return {"API del Obligario final de Bases de Datos 1"}
+

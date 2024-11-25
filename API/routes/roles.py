@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from API.config.database import SessionLocal
-from API.config.db import connection
-from API.schemas.roles import Rol
+from config.database import SessionLocal
+from config.db import connection
+from schemas.roles import Rol
 
 
 Roles = APIRouter()

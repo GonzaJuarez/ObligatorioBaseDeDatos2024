@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import text
 from sqlalchemy.orm import Session
-from API.config.database import SessionLocal
-from API.config.db import connection
-from API.config.hashing import Hasher
-from API.schemas.login import Login
+from config.database import SessionLocal
+from config.db import connection
+from config.hashing import Hasher
+from schemas.login import Login
 
 
 login = APIRouter()

@@ -1,9 +1,9 @@
-from API.config.db import connection, meta, engine
+from config.db import connection, meta, engine
 from sqlalchemy import text
 
-from API.config.hashing import Hasher
+from config.hashing import Hasher
 
-from API.env import ADMIN_CI, ADMIN_NOMBRE, ADMIN_APELLIDO, AMDIN_FECHA_NAC, ADMIN_CEL, ADMIN_CORREO, ADMIN_PASSWORD
+from env import ADMIN_CI, ADMIN_NOMBRE, ADMIN_APELLIDO, AMDIN_FECHA_NAC, ADMIN_CEL, ADMIN_CORREO, ADMIN_PASSWORD
 
 
 def insert_data():

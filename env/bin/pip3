@@ -1,5 +1,5 @@
 #!/bin/sh
-'''exec' "/home/chori/Documents/source/Bases de Datos/ObligatorioBaseDeDatos2024/env/bin/python" "$0" "$@"
+'''exec' "/home/chori/Documents/source/Bases de Datos/ObligatorioBaseDeDatos2024/env/bin/python3" "$0" "$@"
 ' '''
 # -*- coding: utf-8 -*-
 import re
