@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { TextField, Button, Typography, Alert, Box } from '@mui/material';
+import backgroundImage from './login.jpg';
+import './Login.css';  // Importa el archivo CSS
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -10,11 +13,11 @@ const Login = () => {
 
         try {
             const response = await fetch('/login', {
-                method: 'GET',
+                method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username, password })
+                body: JSON.stringify({ username, password }),
             });
 
             if (!response.ok) {
@@ -23,7 +26,7 @@ const Login = () => {
 
             const data = await response.json();
             console.log('Login successful:', data);
-            // Handle successful login (e.g., store session info, redirect to another page)
+            setError('');
         } catch (error) {
             console.error('Error:', error);
             setError('Login failed. Please check your credentials and try again.');
@@ -31,32 +34,48 @@ const Login = () => {
     };
 
     return (
-        <div>
-            <h1>Login</h1>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="username">Username:</label>
-                    <input
-                        type="text"
-                        id="username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="password">Password:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
-                <button type="submit">Login</button>
-            </form>
+        <div className="login-background">
+            <Box className="login-box">
+                <Typography variant="h4" component="h1" className="login-title">
+                    Winter Games Login
+                </Typography>
+                <form onSubmit={handleSubmit}>
+                    <Box className="form-field">
+                        <TextField
+                            label="Username"
+                            variant="outlined"
+                            fullWidth
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                        />
+                    </Box>
+                    <Box className="form-field">
+                        <TextField
+                            label="Password"
+                            variant="outlined"
+                            type="password"
+                            fullWidth
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                    </Box>
+                    {error && (
+                        <Box className="form-field">
+                            <Alert severity="error">{error}</Alert>
+                        </Box>
+                    )}
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        fullWidth
+                        className="login-button"
+                    >
+                        Login
+                    </Button>
+                </form>
+            </Box>
         </div>
     );
 };
