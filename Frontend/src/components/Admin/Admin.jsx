@@ -1,20 +1,32 @@
 import React from 'react';
+import { Box, Typography, Button } from '@mui/material';
 import Manager from '../Manager/Manager';
-import { apiURL } from '../../const';
+import './admin.css';
 
-
-function Admin() {
+const Admin = () => {
   return (
-    <div>
-        <h1>Admin</h1>    
-        <Manager category="Instructores" />
-        <Manager category="Turnos" />
-        <Manager category="Actividades" />
-        <Manager category="Alumnos" />
-        <Manager category="Equipamiento" />
-        <button onClick={() => window.location.href = "/Admin/Reportes"}>Ver Reportes</button>
+    <div className="admin-background">
+      <Box className="admin-container">
+        <Typography variant="h4" component="h1" className="admin-title">
+          Admin Panel
+        </Typography>
+        <Box className="managers-container">
+          <Manager category="Instructores" />
+          <Manager category="Turnos" />
+          <Manager category="Actividades" />
+          <Manager category="Alumnos" />
+          <Manager category="Equipamiento" />
+        </Box>
+        <Button
+          variant="contained"
+          className="admin-button"
+          onClick={() => (window.location.href = "/Admin/Reportes")}
+        >
+          Ver Reportes
+        </Button>
+      </Box>
     </div>
   );
-}
+};
 
 export default Admin;

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Manager.css';
+import { Button, Stack, Typography } from '@mui/material';
 import categoryConfig from './categoryConfig';
 
 const roleIds = {
@@ -190,11 +191,33 @@ const Modal = ({ isOpen, onClose, category }) => {
     if (step === 'selectAction') {
       return (
         <div>
-          <h2>Gestionar {category}</h2>
-          <button onClick={() => setStep('create')}>Crear {category}</button>
-          <button onClick={() => setStep('modify')}>Modificar {category}</button>
-          <button onClick={() => setStep('delete')}>Eliminar {category}</button>
-        </div>
+      <Typography variant="h4" gutterBottom>
+        Gestionar {category}
+      </Typography>
+      <Stack direction="row" spacing={5}>
+        <Button 
+          variant="contained" 
+          color="blue" 
+          onClick={() => setStep('create')}
+        >
+          Crear {category}
+        </Button>
+        <Button 
+          variant="outlined" 
+          color="blue" 
+          onClick={() => setStep('modify')}
+        >
+          Modificar {category}
+        </Button>
+        <Button 
+          variant="contained" 
+          color="blue" 
+          onClick={() => setStep('delete')}
+        >
+          Eliminar {category}
+        </Button>
+      </Stack>
+    </div>
       );
     }
   
@@ -216,8 +239,22 @@ const Modal = ({ isOpen, onClose, category }) => {
             </div>
             <button type="submit">Enviar</button>
           </form>
-          <button onClick={handleShowById}>Mostrar todos los elementos</button>
-          <button onClick={() => setStep('selectAction')}>Atrás</button>
+          <Button
+  onClick={handleShowById}
+  variant="contained"
+  className="admin-button"
+>
+  Mostrar todos los elementos
+</Button>
+
+<Button
+  onClick={() => setStep('selectAction')}
+  variant="outlined"
+  className="admin-button"
+>
+  Atrás
+</Button>
+
         </div>
       );
     }
@@ -295,7 +332,16 @@ const Modal = ({ isOpen, onClose, category }) => {
     <CSSTransition in={isOpen} timeout={300} classNames="modal" unmountOnExit>
       <div className="modal-backdrop">
         <div className="modal">
-          <button className="close-button" onClick={handleClose}>X</button>
+        <Button
+  onClick={handleClose}
+  variant="contained"
+  color="primary"
+  className="close-button"
+  style={{ minWidth: '40px', minHeight: '40px', position: 'absolute', top: '0', right: '0' }}
+>
+  X
+</Button>
+
           {renderContent()}
         </div>
       </div>
@@ -308,7 +354,13 @@ const Manager = ({ category }) => {
 
   return (
     <div>
-      <button onClick={() => setIsModalOpen(true)}>Gestionar {category}</button>
+      <Button
+  variant="contained"
+  className="admin-button"
+  onClick={() => setIsModalOpen(true)}
+>
+  Gestionar {category}
+</Button>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} category={category} />
     </div>
   );

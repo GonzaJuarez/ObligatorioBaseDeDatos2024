@@ -1,0 +1,45 @@
+
+/* Contenedor principal */
+.admin-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;  /* Máximo tamaño de la caja */
+}
+
+/* Título */
+.admin-title {
+    padding: 2rem 0; /* Aumentamos el padding superior e inferior */
+    font-family: 'Roboto', sans-serif; /* Establecemos una fuente moderna y estilizada */
+    font-weight: 2000; /* Fuente más gruesa */
+    font-size: 2.5rem; /* Tamaño más grande */
+    color: #333; /* Un color oscuro para el texto */
+    text-align: center; /* Alineación centrada */
+    letter-spacing: 1px; /* Espaciado entre letras */
+
+}
+
+/* Contenedor para los managers */
+.managers-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+/* Botón de reportes */
+.admin-button {
+    background-color: #1976d2;
+    color: #fff;
+    width: 100%;
+    padding: 10px;
+    text-transform: none;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.admin-button:hover {
+    background-color: #115293;
+}
