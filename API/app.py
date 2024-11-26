@@ -1,17 +1,17 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from routes.actividades import actividades
-from routes.alumno_clase import alumno_clases
-from routes.clase import clases
-from routes.equipamiento import equipamientos
-from routes.login import login
-from routes.personas import personas
-from routes.roles import Roles
-from routes.turnos import turnos
-from routes.reportes import reportes
+from API.routes.actividades import actividades
+from API.routes.alumno_clase import alumno_clases
+from API.routes.clase import clases
+from API.routes.equipamiento import equipamientos
+from API.routes.login import login
+from API.routes.personas import personas
+from API.routes.roles import Roles
+from API.routes.turnos import turnos
+from API.routes.reportes import reportes
 
-from config.data_insert import insert_data
+from API.config.data_insert import insert_data
 
 app = FastAPI()
 

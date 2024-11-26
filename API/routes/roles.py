@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from config.database import SessionLocal
-from config.db import connection
-from schemas.roles import Rol
+from API.config.database import SessionLocal
+from API.config.db import connection
+from API.schemas.roles import Rol
 
 
 Roles = APIRouter()
@@ -92,7 +92,7 @@ def update_rol(rol_id: int, rol: Rol, db: Session = Depends(get_db)):
             """), updated_rol
         )
         db.commit()
-        return {"message": "Rol actualizada exitosamente"}
+        return {"message": "Rol actualizado exitosamente"}
     except Exception as e:
         connection.rollback()
         raise HTTPException(status_code=400, detail=str(e))

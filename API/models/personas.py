@@ -1,5 +1,5 @@
 from sqlalchemy import Table, Column, Integer, String, Date, ForeignKey
-from config.database import meta
+from API.config.database import meta
 
 
 model_persona = Table("personas", meta,
