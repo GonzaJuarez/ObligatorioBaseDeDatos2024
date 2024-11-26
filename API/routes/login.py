@@ -1,12 +1,20 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from API.config.database import SessionLocal
 from sqlalchemy import text
 from datetime import timedelta, datetime
 from jose import jwt, JWTError
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel
-from API.config.database import get_db
 from passlib.context import CryptContext
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 # Configuraciones de JWT
 SECRET_KEY = "mi_clave_secreta_segura"
