@@ -1,6 +1,12 @@
-from sqlalchemy import Table, Column, Integer, String, ForeignKey
+from sqlalchemy import Table, Column, String, ForeignKey
 from API.config.database import meta
 
-model_login = Table("login", meta,
-                    Column("ci", Integer, ForeignKey("personas.ci"), primary_key=True),
-                    Column("contraseña", String(150), nullable=False))
+# aca cambie el esquema de la tabla login para usar correo en vez de ci y
+# los campos que faltaban para poder hacer la relacion con la tabla personas
+model_login = Table(
+    "login", meta,
+    Column("correo", String(100), ForeignKey("personas.correo"), primary_key=True),
+    Column("contraseña", String(150), nullable=False)
+    
+)
+

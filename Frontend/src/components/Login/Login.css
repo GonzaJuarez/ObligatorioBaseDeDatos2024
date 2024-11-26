@@ -1,0 +1,41 @@
+/* Fondo de la página */
+.login-background {
+    background-image: url('../../assets/login.jpg');
+    background-size: cover;
+    background-position: left;
+    width: 100vw;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Caja de login */
+.login-box {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;  /* Máximo tamaño de la caja */
+}
+
+/* Título del formulario */
+.login-title {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+/* Estilos para los campos del formulario */
+.form-field {
+    margin-bottom: 16px;
+}
+
+/* Botón de login */
+.login-button {
+    background-color: #1976d2;
+    &:hover {
+        background-color: #115293;
+    }
+}

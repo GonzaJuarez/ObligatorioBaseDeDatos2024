@@ -92,7 +92,7 @@ def update_rol(rol_id: int, rol: Rol, db: Session = Depends(get_db)):
             """), updated_rol
         )
         db.commit()
-        return {"message": "Rol actualizada exitosamente"}
+        return {"message": "Rol actualizado exitosamente"}
     except Exception as e:
         connection.rollback()
         raise HTTPException(status_code=400, detail=str(e))

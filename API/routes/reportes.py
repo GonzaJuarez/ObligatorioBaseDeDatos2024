@@ -16,17 +16,17 @@ def get_db():
         db.close()
 
 
-@reportes.get("/activiades_mas_ganancias")
+@reportes.get("/actividades_mas_ganancias")
 def get_actividades_mas_ganancias(db: Session = Depends(get_db)):
     try:
         result = db.execute(text("""
-        SELECT 
+        SELECT
             a.descripcion AS actividad,
-            (SUM(e.costo) + a.costo * COUNT(ac.id_alumno)) AS ingresos
+            (SUM(e.costo) + a.costo * COUNT(ac.ci_alumno)) AS ingresos
         FROM actividades a
         LEFT JOIN clase c ON a.id = c.id_actividad
         LEFT JOIN alumno_clase ac ON c.id = ac.id_clase
-        LEFT JOIN equipamiento e ON ac.id_equipo = e.id
+        LEFT JOIN equipamiento e ON ac.id_equipamiento = e.id
         GROUP BY a.id
         ORDER BY ingresos DESC;
         """)).fetchone()
@@ -40,9 +40,9 @@ def get_actividades_mas_ganancias(db: Session = Depends(get_db)):
 def get_actividades_mas_alumnos(db: Session = Depends(get_db)):
     try:
         result = db.execute(text("""
-        SELECT 
+        SELECT
             a.descripcion AS actividad,
-            COUNT(DISTINCT ac.id_alumno) AS cantidad_alumnos
+            COUNT(DISTINCT ac.ci_alumno) AS cantidad_alumnos
         FROM actividades a
         LEFT JOIN clase c ON a.id = c.id_actividad
         LEFT JOIN alumno_clase ac ON c.id = ac.id_clase

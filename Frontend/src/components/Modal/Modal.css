@@ -1,0 +1,20 @@
+.modal display-block {
+  display: block;
+}
+
+.modal display-none {
+  display: none;
+}
+
+.modal-main {
+  position: fixed;
+  background-color: white;
+  width: 80%;
+  height: 80%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 20px;
+}

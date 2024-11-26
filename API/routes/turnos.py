@@ -19,14 +19,29 @@ def get_db():
 @turnos.get("/turnos")
 def get_turnos(db: Session = Depends(get_db)):
     try:
-        result = db.execute(text("SELECT * FROM turnos"))
-        return [dict(row._mapping) for row in result]
+        result = db.execute(text("SELECT * FROM turnos")).fetchall()
+        turnos = []
+        for turno in result:
+            turno = dict(turno._mapping)
+            hora_inicio = turno["hora_inicio"]
+            hora_fin = turno["hora_fin"]
+
+            hora_inicio_seconds = hora_inicio.total_seconds()
+            hora_fin_seconds = hora_fin.total_seconds()
+
+            hora_inicio = f"{int(hora_inicio_seconds // 3600)}:{int((hora_inicio_seconds % 3600) // 60)}:{int(hora_inicio_seconds % 60)}"
+            hora_fin = f"{int(hora_fin_seconds // 3600)}:{int((hora_fin_seconds % 3600) // 60)}:{int(hora_fin_seconds % 60)}"
+
+            turno["hora_inicio"] = hora_inicio
+            turno["hora_fin"] = hora_fin
+            turnos.append(turno)
+        return turnos
     except Exception as e:
-        connection.rollback()
-        return HTTPException(status_code=400, detail=str(e))
+        db.rollback()
+        raise HTTPException(status_code=400, detail=str(e))
 
 
-@turnos.get("/turnos/{id}")
+@turnos.get("/turnos/{id_turno}")
 def get_turno(id_turno: int, db: Session = Depends(get_db)):
     try:
         result = db.execute(
@@ -35,7 +50,16 @@ def get_turno(id_turno: int, db: Session = Depends(get_db)):
                 WHERE id = :id
             """), {"id": id_turno}
         ).fetchone()
-        return dict(result._mapping)
+        turno = dict(result._mapping)
+        hora_inicio = turno["hora_inicio"]
+        hora_fin = turno["hora_fin"]
+        hora_inicio_seconds = hora_inicio.total_seconds()
+        hora_fin_seconds = hora_fin.total_seconds()
+        turno[
+            "hora_inicio"] = f"{int(hora_inicio_seconds // 3600)}:{int((hora_inicio_seconds % 3600) // 60)}:{int(hora_inicio_seconds % 60)}"
+        turno[
+            "hora_fin"] = f"{int(hora_fin_seconds // 3600)}:{int((hora_fin_seconds % 3600) // 60)}:{int(hora_fin_seconds % 60)}"
+        return turno
     except Exception as e:
         connection.rollback()
         return HTTPException(status_code=400, detail=str(e))
