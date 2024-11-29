@@ -26,7 +26,7 @@ def get_equipamiento(db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail=f"Error: {str(e)}")
 
 
-@equipamientos.get("/equipamiento/{id}")
+@equipamientos.get("/equipamiento/{id_equipamiento}")
 def get_equipamiento(id_equipamiento: int, db: Session = Depends(get_db)):
     if not isinstance(id_equipamiento, int):
         raise HTTPException(status_code=400, detail="El id del equipamiento debe ser un número entero.")
@@ -36,6 +36,20 @@ def get_equipamiento(id_equipamiento: int, db: Session = Depends(get_db)):
             {"id_equipamiento": id_equipamiento}
         )
         return dict(result._mapping) if result else None
+    except Exception as e:
+        connection.rollback()
+        raise HTTPException(status_code=400, detail=f"Error: {str(e)}")
+    
+@equipamientos.get("/equipamiento/actividad/{id_actividad}")
+def get_equipamiento_by_actividad(id_actividad: int, db: Session = Depends(get_db)):
+    if not isinstance(id_actividad, int):
+        raise HTTPException(status_code=400, detail="El id de la actividad debe ser un número entero.")
+    try:
+        result = db.execute(
+            text("SELECT * FROM equipamiento WHERE id_actividad = :id_actividad"),
+            {"id_actividad": id_actividad}
+        )
+        return [dict(row._mapping) for row in result]
     except Exception as e:
         connection.rollback()
         raise HTTPException(status_code=400, detail=f"Error: {str(e)}")
