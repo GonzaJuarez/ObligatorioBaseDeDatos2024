@@ -19,7 +19,6 @@ function App() {
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<Login />} />
           <Route path="/alumnos" element={<Alumnos />} />
-          <Route path="/admin/reportes" element={<Reportes />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="*" element={<Navigate to="/login" />} />
           <Route
