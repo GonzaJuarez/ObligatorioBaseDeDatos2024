@@ -40,6 +40,30 @@ def get_clase_id(id_clase: int, db: Session = Depends(get_db)):
     except Exception as e:
         connection.rollback()
         raise HTTPException(status_code=400, detail=f"Error: {str(e)}")
+    
+
+@clases.get("/clases/disponibilidad/{id_turno}")
+def get_clases_disponibilidad(id_turno: int, db: Session = Depends(get_db)):
+    try:
+        clases_result = db.execute(
+            text("SELECT ci_instructor FROM clase WHERE id_turno = :turno"),
+                {"turno": id_turno}
+            ).fetchall()
+        
+        instructores_ocupados = {clase.ci_instructor for clase in clases_result}
+        
+        instructores_result = db.execute(
+                text("SELECT ci FROM personas WHERE id_rol = 2")
+            ).fetchall()    
+        
+        for instructor in instructores_result:
+                if instructor.ci not in instructores_ocupados:
+                    return {"instructor_disponible": True, "instructor_ci": instructor.ci}
+                
+        return {"instructor_disponible": False, "mensaje": "No hay instructor disponible para el turno seleccionado"}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @clases.post("/clases")
@@ -59,8 +83,9 @@ def create_clase(clase: Clase, db: Session = Depends(get_db)):
         "id_turno": clase.id_turno,
         "dictada": clase.dictada
     }
+    
     try:
-        db.execute(
+        result = db.execute(
             text("""
                 INSERT INTO clase (ci_instructor, id_actividad, id_turno, dictada) 
                 VALUES (:ci_instructor, :id_actividad, :id_turno, :dictada)
@@ -68,10 +93,15 @@ def create_clase(clase: Clase, db: Session = Depends(get_db)):
             new_clase
         )
         db.commit()
-        return {"message": "Clase creada exitosamente"}
+
+        created_id = result.lastrowid
+        return {"message": "Clase creada exitosamente", "id": created_id}
+        
     except Exception as e:
-        connection.rollback()
+        db.rollback()
         raise HTTPException(status_code=400, detail=f"Error al crear la clase: {str(e)}")
+
+
 
 
 @clases.put("/clases/{id_clase}")

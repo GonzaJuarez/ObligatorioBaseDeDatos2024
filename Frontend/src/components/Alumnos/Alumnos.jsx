@@ -13,6 +13,35 @@ const Alumnos = () => {
     const [success, setSuccess] = useState(false);
     const navigate = useNavigate();
 
+    useEffect(() => {
+        const fetchStudentData = async () => {
+            try {
+                const accessToken = localStorage.getItem('access_token');
+                if (!accessToken) throw new Error('No se encontró el token de acceso');
+
+                const response = await fetch('http://localhost:8000/datos_personales', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${accessToken}`,
+                    },
+                });
+
+                if (!response.ok) throw new Error('Error al obtener los datos del alumno');
+
+                const data = await response.json();
+                console.log('Datos del alumno:', data);
+                localStorage.setItem('ci', data.ci);
+                console.log('CI alumno:', data.ci);
+            } catch (error) {
+                console.error('Error obteniendo la información del alumno:', error);
+                setError('No se pudo obtener la información del alumno. Intenta recargar la página.');
+            }
+        };
+
+        fetchStudentData();
+    }, []);
+
     // Cargar actividades desde el backend
     useEffect(() => {
         const fetchActividades = async () => {
@@ -33,6 +62,7 @@ const Alumnos = () => {
 
         fetchActividades();
     }, []);
+
 
     // Cargar turnos desde el backend
     useEffect(() => {
@@ -85,32 +115,51 @@ const Alumnos = () => {
 
         try {
             // Verificar disponibilidad del profesor (si hay un endpoint para esto)
-            const response = await fetch('http://localhost:8000/verificar_profesor', {
-                method: 'POST',
+            const response = await fetch(`http://localhost:8000/clases/disponibilidad/${turnoSeleccionado}`, {
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    actividad: actividadSeleccionada,
-                    turno: turnoSeleccionado,
-                }),
             });
             if (!response.ok) throw new Error('No hay profesor disponible para esta actividad y turno');
+            const data = await response.json();
+            console.log(data);
+            if (!data.instructor_disponible) throw new Error('No hay profesor disponible para esta actividad y turno');
 
-            // Realizar la inscripción
-            const inscripcionResponse = await fetch('http://localhost:8000/inscripciones', {
+            const instructor = data.instructor_ci;
+            
+
+            // Realizar la inscripción parte 1: post a clases
+            const inscripcionResponse = await fetch('http://localhost:8000/clases', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    actividad: actividadSeleccionada,
-                    equipamiento: equipamientoSeleccionado,
-                    turno: turnoSeleccionado,
+                    ci_instructor: instructor,
+                    id_actividad: actividadSeleccionada,
+                    id_turno: turnoSeleccionado,
+                    dictada: false,
                 }),
             });
 
-            if (!inscripcionResponse.ok) throw new Error('Error al realizar la inscripción');
+            if (!inscripcionResponse.ok) throw new Error('Error al realizar la inscripción: post a clases');
+
+            const dataClase = await inscripcionResponse.json();
+            const idClase = dataClase.id;
+            //Realizar la inscripción parte 2: post a clase_alumno
+            const inscripcionResponse2 = await fetch('http://localhost:8000/alumno_clase', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id_clase: idClase,
+                    ci_alumno: localStorage.getItem('ci'),
+                    id_equipamiento: equipamientoSeleccionado,
+                }),
+            });
+            if (!inscripcionResponse2.ok) throw new Error('Error al realizar la inscripción: post a clase_alumno');
             setSuccess(true);
         } catch (error) {
             console.error('Error:', error);
@@ -180,7 +229,7 @@ const Alumnos = () => {
                 <Button type="submit" variant="contained" fullWidth>
                     Inscribirse
                 </Button>
-                <Button variant="text" fullWidth onClick={() => navigate('/mis-clases')}>
+                <Button variant="text" fullWidth onClick={() => navigate('/alumnos/mis-clases')}>
                     Ver Mis Clases
                 </Button>
             </form>
