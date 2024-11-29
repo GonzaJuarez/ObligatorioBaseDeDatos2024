@@ -155,6 +155,7 @@ def datos_personales(current_user: dict = Depends(get_current_user), db: Session
 
     # Retornar los datos de la persona
     return {
+        "ci": result.ci,
         "correo": result.correo,
         "nombre": result.nombre,
         "apellido": result.apellido,
