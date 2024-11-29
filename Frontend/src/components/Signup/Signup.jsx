@@ -90,7 +90,7 @@ const Signup = () => {
                 },
                 body: JSON.stringify({
                     correo: formData.correo,
-                    contraseña: formData.password,
+                    contrasena: formData.password,
                 }),
             });
 

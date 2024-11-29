@@ -27,10 +27,26 @@ const Login = () => {
 
             const data = await response.json();
             localStorage.setItem('access_token', data.access_token);
-            localStorage.setItem('user_role', data.rol); // Almacenar el rol del usuario
+            const datosPersonalesResponse = await fetch('http://localhost:8000/datos_personales', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${data.access_token}`
+                }
+            });
+
+            if (!datosPersonalesResponse.ok) {
+                throw new Error('Error al obtener datos personales');
+            }
+
+            const datos = await datosPersonalesResponse.json();
+            const id_rol = datos.rol;
+            console.log('datos:', datos);  
+            localStorage.setItem('user_role', id_rol); // Almacenar el rol del usuario
+            console.log('ID ROL:', id_rol);
 
             setError('');
-            if ([1, 2].includes(data.rol)) {
+            if ([1, 2].includes(id_rol)) {
                 navigate('/admin');
             } else {
                 navigate('/alumnos');

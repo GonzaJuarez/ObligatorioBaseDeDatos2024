@@ -9,6 +9,6 @@ model_persona = Table("personas", meta,
                       Column("apellido", String(50), nullable=False),
                       Column("fecha_nacimiento", Date, nullable=False),
                       Column("cel", Integer, nullable=False),
-                      Column("correo", String(50), nullable=False))
+                      Column("correo", String(50), nullable=False, unique=True))
 
 
