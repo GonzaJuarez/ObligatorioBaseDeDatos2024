@@ -5,12 +5,13 @@
   text-align: center;
   padding: 2rem;
   margin: 0 auto;
-  background-color: #ffffff;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 800px;
   min-height: 100vh;
+  background-color: #f9f9f9;
+  border-radius: 8px;
 }
 
 .back-button {
@@ -28,7 +29,7 @@
 
 .reportes-subtitle {
   margin-top: 1.5rem;
-  font-weight: 500;
+  font-weight: bold;
   color: #0d0d0d;
 }
 
@@ -43,4 +44,19 @@
 
 .reportes-container p {
   color: #888;
+}
+
+.reporte {
+  margin-bottom: 30px;
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.data-section p {
+  margin: 8px 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #0d0d0d;
 }

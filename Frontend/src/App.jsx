@@ -1,17 +1,22 @@
-import React from 'react'
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import PrivateRoute from './components/PrivateRoute/PrivateRoute.jsx'
-import Login from './components/Login/Login.jsx'
-import Alumnos from './components/Alumnos/Alumnos.jsx'
-import Admin from './components/Admin/Admin.jsx'
-import Reportes from './components/Reportes/Reportes.jsx'
-import Signup from './components/Signup/Signup.jsx'
-import './App.css'
+import React from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute.jsx";
+import Login from "./components/Login/Login.jsx";
+import Alumnos from "./components/Alumnos/Alumnos.jsx";
+import Admin from "./components/Admin/Admin.jsx";
+import Reportes from "./components/Reportes/Reportes.jsx";
+import Signup from "./components/Signup/Signup.jsx";
+import "./App.css";
+import Logout from "./components/Logout/Logout.jsx";
 
 function App() {
-
   return (
     <div>
       <Router>
@@ -37,14 +42,11 @@ function App() {
               </PrivateRoute>
             }
           />
-
-
         </Routes>
         <ToastContainer />
       </Router>
     </div>
-  )
-
+  );
 }
 
-export default App
+export default App;

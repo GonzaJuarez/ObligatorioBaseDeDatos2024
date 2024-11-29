@@ -1,14 +1,14 @@
 import React from "react";
 import { Box, Typography, Button } from "@mui/material";
 import Manager from "../Manager/Manager";
-import Logout from "../Logout/Logout";
 import "./admin.css";
+import Logout from "../Logout/Logout";
 
 const Admin = () => {
   return (
-    <div className="admin-background">
-      <Logout />
+    <div className="admin-backround">
       <Box className="admin-container">
+        <Logout />
         <Typography variant="h4" component="h1" className="admin-title">
           Admin Panel
         </Typography>

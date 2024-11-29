@@ -1,0 +1,151 @@
+/* Caja de inscripción */
+.inscripcion-box {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 450px; /* Máximo tamaño de la caja */
+
+  /* Estilos para centrar la caja */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centrado perfecto en la pantalla */
+}
+
+/* Título del formulario */
+.inscripcion-title {
+  text-align: center;
+  margin-bottom: 30px !important;
+  padding: 20px !important;
+  font-size: 1.8rem;
+  color: #0571de !important; /* Color relacionado con el estilo de login */
+}
+
+/* Estilos para los campos del formulario */
+.form-field {
+  margin-bottom: 16px;
+}
+
+/* Estilos para los botones */
+.inscripcion-button {
+  background-color: #1976d2;
+  &:hover {
+    background-color: #115293;
+  }
+}
+
+.inscripcion-button-text {
+  background-color: transparent;
+  color: #115293;
+  &:hover {
+    background-color: transparent;
+    color: #1976d2;
+  }
+}
+
+/* Alertas de error y éxito */
+.alert {
+  margin-top: 10px;
+}
+
+.ver-clases-button {
+  background-color: #ececec;
+  &:hover {
+    background-color: #dcdcdc;
+  }
+}
+
+/* Estilo para el contenedor del formulario */
+.form-field {
+  margin-bottom: 20px; /* Espacio entre los elementos del formulario */
+  padding: 0 10px; /* Espaciado horizontal para evitar que los bordes se toquen */
+}
+
+/* Estilo para el FormControl, que contiene el Select */
+.MuiFormControl-root {
+  margin-bottom: 16px; /* Espaciado entre los controles del formulario */
+  width: 100%;
+  position: relative;
+}
+
+/* Estilo para el label de entrada */
+.MuiInputLabel-root {
+  color: #555; /* Color gris para el texto del label */
+  font-size: 1rem; /* Tamaño de fuente cómodo */
+  font-weight: 500;
+  transition: all 0.3s ease; /* Transición suave cuando se mueve el label */
+}
+
+/* Estilo para el Select */
+.MuiSelect-root {
+  background-color: #fff; /* Fondo blanco */
+  border-radius: 8px; /* Bordes redondeados */
+  padding: 10px 12px; /* Espaciado dentro del select */
+  font-size: 1rem; /* Tamaño de fuente */
+  border: 1px solid #ccc; /* Borde gris claro */
+  width: 100%;
+  transition: border-color 0.3s ease; /* Transición suave en el borde */
+}
+
+/* Efecto de enfoque en el Select */
+.MuiSelect-root:focus {
+  border-color: #3f51b5; /* Color azul cuando el Select está enfocado */
+  outline: none; /* Quitar el borde de enfoque predeterminado */
+}
+
+/* Estilo para los MenuItem dentro del Select */
+.MuiMenuItem-root {
+  font-size: 1rem; /* Tamaño de fuente */
+  padding: 10px; /* Espaciado dentro de los items */
+  color: #333; /* Color de texto de los items */
+  background-color: #fff; /* Fondo blanco */
+  transition: background-color 0.3s ease; /* Transición para el hover */
+}
+
+/* Efecto hover sobre los MenuItem */
+.MuiMenuItem-root:hover {
+  background-color: #f4f4f4; /* Color de fondo cuando el item es hovered */
+}
+
+/* Estilo para el estado de error (si lo necesitas) */
+.MuiFormHelperText-root {
+  color: #f44336; /* Color rojo para el texto de error */
+  font-size: 0.875rem; /* Tamaño de fuente pequeño */
+}
+
+/* Estilo adicional para el contenedor de todo el formulario */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Espaciado entre todos los elementos */
+  max-width: 600px; /* Ancho máximo para el formulario */
+  margin: 0 auto; /* Centrar el formulario en la página */
+  font-family: Arial, sans-serif !important; /* Fuente predeterminada */
+}
+
+/* Estilo personalizado para InputLabel */
+#actividad-label {
+  position: absolute; /* Posición absoluta para que se coloque encima */
+  font-size: 16px; /* Tamaño de la fuente */
+  color: #333; /* Color del texto */
+  background-color: #fff; /* Fondo blanco para que no se mezcle con el campo */
+  padding: 0 5px; /* Relleno horizontal para separar del borde */
+}
+
+#equipamiento-label {
+  position: absolute; /* Posición absoluta para que se coloque encima */
+  font-size: 16px; /* Tamaño de la fuente */
+  color: #333; /* Color del texto */
+  background-color: #fff; /* Fondo blanco para que no se mezcle con el campo */
+  padding: 0 5px; /* Relleno horizontal para separar del borde */
+}
+
+#turno-label {
+  position: absolute; /* Posición absoluta para que se coloque encima */
+  font-size: 16px; /* Tamaño de la fuente */
+  color: #333; /* Color del texto */
+  background-color: #fff; /* Fondo blanco para que no se mezcle con el campo */
+  padding: 0 5px; /* Relleno horizontal para separar del borde */
+}

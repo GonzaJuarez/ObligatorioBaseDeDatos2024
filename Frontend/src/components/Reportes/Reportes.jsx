@@ -91,67 +91,73 @@ function Reportes() {
           Reportes
         </Typography>
 
-        <Typography variant="h6" className="reportes-subtitle">
-          Actividad con más ganancias:
-        </Typography>
-        {dataGanancias ? (
-          <div>
-            <p>
-              <strong>Actividad:</strong> {dataGanancias.actividad}
-            </p>
-            <p>
-              <strong>Ganancias:</strong>{" "}
-              {dataGanancias.ingresos !== null
-                ? dataGanancias.ingresos
-                : "No disponibles"}
-            </p>
-          </div>
-        ) : (
-          <p>Cargando...</p>
-        )}
+        <div className="reporte">
+          <Typography variant="h6" className="reportes-subtitle">
+            Actividad con más ganancias:
+          </Typography>
+          {dataGanancias ? (
+            <div className="data-section">
+              <p>
+                <strong>Actividad:</strong> {dataGanancias.actividad}
+              </p>
+              <p>
+                <strong>Ganancias:</strong>{" "}
+                {dataGanancias.ingresos !== null
+                  ? dataGanancias.ingresos
+                  : "No disponibles"}
+              </p>
+            </div>
+          ) : (
+            <p>Cargando...</p>
+          )}
+        </div>
 
-        <Typography variant="h6" className="reportes-subtitle">
-          Actividad con más alumnos:
-        </Typography>
-        {dataAlumnos ? (
-          <div>
-            <p>
-              <strong>Actividad:</strong> {dataAlumnos.actividad}
-            </p>
-            <p>
-              <strong>Cantidad de alumnos:</strong>{" "}
-              {dataAlumnos.cantidad_alumnos !== null
-                ? dataAlumnos.cantidad_alumnos
-                : "No disponibles"}
-            </p>
-          </div>
-        ) : (
-          <p>Cargando...</p>
-        )}
+        <div className="reporte">
+          <Typography variant="h6" className="reportes-subtitle">
+            Actividad con más alumnos:
+          </Typography>
+          {dataAlumnos ? (
+            <div className="data-section">
+              <p>
+                <strong>Actividad:</strong> {dataAlumnos.actividad}
+              </p>
+              <p>
+                <strong>Cantidad de alumnos:</strong>{" "}
+                {dataAlumnos.cantidad_alumnos !== null
+                  ? dataAlumnos.cantidad_alumnos
+                  : "No disponibles"}
+              </p>
+            </div>
+          ) : (
+            <p>Cargando...</p>
+          )}
+        </div>
 
-        <Typography variant="h6" className="reportes-subtitle">
-          Turno más dictado:
-        </Typography>
-        {dataTurnos ? (
-          <div>
-            <p>
-              <strong>Inicio de turno:</strong>{" "}
-              {new Date(dataTurnos.inicio_turno * 1000).toLocaleTimeString()}
-            </p>
-            <p>
-              <strong>Fin de turno:</strong>{" "}
-              {new Date(dataTurnos.fin_turno * 1000).toLocaleTimeString()}
-            </p>
-            <p>
-              <strong>Total de clases:</strong>{" "}
-              {dataTurnos.total_clases !== null
-                ? dataTurnos.total_clases
-                : "No disponibles"}
-            </p>
-          </div>
-        ) : (
-          <p>Cargando...</p>
-        )}
+        <div className="reporte">
+          <Typography variant="h6" className="reportes-subtitle">
+            Turno más dictado:
+          </Typography>
+          {dataTurnos ? (
+            <div className="data-section">
+              <p>
+                <strong>Inicio de turno:</strong>{" "}
+                {new Date(dataTurnos.inicio_turno * 1000).toLocaleTimeString()}
+              </p>
+              <p>
+                <strong>Fin de turno:</strong>{" "}
+                {new Date(dataTurnos.fin_turno * 1000).toLocaleTimeString()}
+              </p>
+              <p>
+                <strong>Total de clases:</strong>{" "}
+                {dataTurnos.total_clases !== null
+                  ? dataTurnos.total_clases
+                  : "No disponibles"}
+              </p>
+            </div>
+          ) : (
+            <p>Cargando...</p>
+          )}
+        </div>
       </div>
     </div>
   );
