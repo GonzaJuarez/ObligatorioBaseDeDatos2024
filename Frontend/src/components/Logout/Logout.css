@@ -1,0 +1,6 @@
+.logout-button {
+  position: fixed; /* Fija el botón en la pantalla, incluso cuando se haga scroll */
+  bottom: 50px; /* Ajusta la distancia desde la parte superior */
+  right: 600px; /* Ajusta la distancia desde la parte izquierda */
+  z-index: 1000; /* Asegura que el botón esté por encima de otros elementos */
+}
