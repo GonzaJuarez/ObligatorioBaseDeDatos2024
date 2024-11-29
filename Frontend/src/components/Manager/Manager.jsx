@@ -190,34 +190,35 @@ const Modal = ({ isOpen, onClose, category }) => {
   const renderContent = () => {
     if (step === 'selectAction') {
       return (
-        <div>
-      <Typography variant="h4" gutterBottom>
-        Gestionar {category}
-      </Typography>
-      <Stack direction="row" spacing={5}>
-        <Button 
-          variant="contained" 
-          color="blue" 
-          onClick={() => setStep('create')}
-        >
-          Crear {category}
-        </Button>
-        <Button 
-          variant="outlined" 
-          color="blue" 
-          onClick={() => setStep('modify')}
-        >
-          Modificar {category}
-        </Button>
-        <Button 
-          variant="contained" 
-          color="blue" 
-          onClick={() => setStep('delete')}
-        >
-          Eliminar {category}
-        </Button>
-      </Stack>
-    </div>
+        <div className="category-management-container">
+  <Typography variant="h4" gutterBottom className="category-title">
+    Gestionar {category}
+  </Typography>
+  <Stack direction="row" spacing={5} className="category-buttons">
+    <Button 
+      variant="contained" 
+      color="primary" 
+      onClick={() => setStep('create')}
+    >
+      Crear {category}
+    </Button>
+    <Button 
+      variant="outlined" 
+      color="primary" 
+      onClick={() => setStep('modify')}
+    >
+      Modificar {category}
+    </Button>
+    <Button 
+      variant="contained" 
+      color="secondary" 
+      onClick={() => setStep('delete')}
+    >
+      Eliminar {category}
+    </Button>
+  </Stack>
+</div>
+
       );
     }
   
@@ -242,7 +243,7 @@ const Modal = ({ isOpen, onClose, category }) => {
           <Button
   onClick={handleShowById}
   variant="contained"
-  className="admin-button"
+  className="admin-button send-button"
 >
   Mostrar todos los elementos
 </Button>
@@ -250,7 +251,7 @@ const Modal = ({ isOpen, onClose, category }) => {
 <Button
   onClick={() => setStep('selectAction')}
   variant="outlined"
-  className="admin-button"
+  className="back-button"
 >
   Atrás
 </Button>

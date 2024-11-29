@@ -93,6 +93,13 @@ const Login = () => {
                         fullWidth
                         className="register-button"
                         onClick={handleRegisterRedirect}
+                        sx={{
+                            backgroundColor: 'transparent',
+                            '&:hover': {
+                              backgroundColor: 'transparent', 
+                              color: '#115293', 
+                            },
+                          }}
                     >
                         ¿No tenés cuenta? Registrate
                     </Button>

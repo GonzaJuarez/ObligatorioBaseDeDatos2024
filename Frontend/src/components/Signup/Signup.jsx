@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { TextField, Button, Typography, Box, Alert, Select } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import './Signup.css';
+
 
 const Signup = () => {
     const [formData, setFormData] = useState({
@@ -114,7 +116,7 @@ const Signup = () => {
 
     return (
         <Box className="signup-box">
-            <Typography variant="h4" component="h1">
+            <Typography variant="h4" component="h1" className="signup-title">
                 Registro de Usuario
             </Typography>
             <form onSubmit={handleSignupSubmit}>
@@ -181,6 +183,9 @@ const Signup = () => {
                         type="date"
                         variant="outlined"
                         fullWidth
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                         value={formData.fechaNacimiento}
                         onChange={handleChange}
                         required

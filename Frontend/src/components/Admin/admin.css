@@ -15,7 +15,7 @@
     font-family: 'Roboto', sans-serif; /* Establecemos una fuente moderna y estilizada */
     font-weight: 2000; /* Fuente más gruesa */
     font-size: 2.5rem; /* Tamaño más grande */
-    color: #333; /* Un color oscuro para el texto */
+    color: #3498db !important;
     text-align: center; /* Alineación centrada */
     letter-spacing: 1px; /* Espaciado entre letras */
 

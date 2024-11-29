@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { Button, Typography, Box, CircularProgress } from "@mui/material";
 import { apiURL } from "../../const";
+import './Reportes.css';
 
 function Reportes() {
     const [dataGanancias, setDataGanancias] = useState(null);
@@ -73,28 +75,47 @@ function Reportes() {
     }, []);
 
     return (
-        <div>
-            <button onClick={() => window.location.href = "/Admin"}>Volver</button>
-            <h1>Reportes</h1>
-            <h2>Actividad con más ganancias:</h2>
-            {dataGanancias ? (
-                <pre>{JSON.stringify(dataGanancias, null, 2)}</pre>
-            ) : (
-                <p>Cargando...</p>
-            )}
-            <h2>Actividad con más alumnos:</h2>
-            {dataAlumnos ? (
-                <pre>{JSON.stringify(dataAlumnos, null, 2)}</pre>
-            ) : (
-                <p>Cargando...</p>
-            )}
-            <h2>Turno más dictado:</h2>
-            {dataTurnos ? (
-                <pre>{JSON.stringify(dataTurnos, null, 2)}</pre>
-            ) : (
-                <p>Cargando...</p>
-            )}
-        </div>
+        <div className="reportes-container">
+  <Button
+    variant="outlined"
+    onClick={() => window.location.href = "/Admin"}
+    className="back-button"
+  >
+    Volver
+  </Button>
+
+  <Typography variant="h4" component="h1" className="reportes-title">
+    Reportes
+  </Typography>
+
+  <Typography variant="h6" className="reportes-subtitle">
+    Actividad con más ganancias:
+  </Typography>
+  {dataGanancias ? (
+    <pre>{JSON.stringify(dataGanancias, null, 2)}</pre>
+  ) : (
+    <p>Cargando...</p>
+  )}
+
+  <Typography variant="h6" className="reportes-subtitle">
+    Actividad con más alumnos:
+  </Typography>
+  {dataAlumnos ? (
+    <pre>{JSON.stringify(dataAlumnos, null, 2)}</pre>
+  ) : (
+    <p>Cargando...</p>
+  )}
+
+  <Typography variant="h6" className="reportes-subtitle">
+    Turno más dictado:
+  </Typography>
+  {dataTurnos ? (
+    <pre>{JSON.stringify(dataTurnos, null, 2)}</pre>
+  ) : (
+    <p>Cargando...</p>
+  )}
+</div>
+
     );
 }
 

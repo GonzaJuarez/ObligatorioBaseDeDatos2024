@@ -1,0 +1,67 @@
+.signup-title {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    color: #3498db !important;
+}
+
+/* Fondo de la página */
+.signup-background {
+    background-image: url('../../assets/signup.jpg'); /* Puedes usar la misma imagen del login o una diferente */
+    background-size: cover;
+    background-position: center;
+    width: 100vw;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Caja de registro */
+.signup-box {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px; /* Mantén el mismo tamaño que el login */
+}
+
+/* Título del formulario */
+.signup-box h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    font-size: 1.5rem; /* Asegúrate de que coincida con el título del login */
+    color: #333; /* Color de texto similar */
+}
+
+/* Estilos para los campos del formulario */
+.form-field {
+    margin-bottom: 16px;
+
+}
+
+/* Botón de registro */
+.signup-box button {
+    background-color: #1976d2;
+    color: #fff;
+    font-weight: bold;
+    &:hover {
+        background-color: #115293;
+    }
+}
+
+/* Mensajes de éxito y error */
+.signup-box .MuiAlert-root {
+    margin-bottom: 16px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1); /* Invierte los colores para que sea visible en fondos claros */
+}
+
+/* Para Firefox */
+input[type="date"]::-moz-calendar-picker-indicator {
+    color: black; /* Ajusta el color del ícono */
+}

@@ -20,10 +20,10 @@
   color: #333333; /* Texto oscuro para mayor legibilidad */
   padding: 2rem;
   border-radius: 1rem; /* Bordes más redondeados */
-  width: 90%;
+  width: 100%;
   max-height: 80vh; /* Altura máxima */
   overflow-y: auto; /* Desplazamiento vertical */
-  max-width: 30rem; /* Mayor anchura máxima para comodidad */
+  max-width: 40rem; /* Mayor anchura máxima para comodidad */
   box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.3); /* Sombra más pronunciada */
 }
 
@@ -54,7 +54,7 @@
   border: 1px solid #ddd; /* Borde suave y discreto */
   border-radius: 0.75rem; /* Bordes más redondeados para suavizar el diseño */
   font-size: 1rem;
-  color: #e0e0e0;
+  color: #585858;
   width: 100%;
   box-sizing: border-box; /* Asegura que padding y border no afecten al ancho */
   transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transición suave para interacciones */
@@ -74,6 +74,17 @@
   background-color: #f0f0f0; /* Color de fondo más claro cuando está deshabilitado */
   border-color: #ddd; /* Mantener el borde gris cuando está deshabilitado */
   color: #999999; /* Texto gris para deshabilitar */
+}
+
+.category-title {
+  padding: 1.4rem 0; /* Aumentamos el padding superior e inferior */
+  font-family: 'Roboto', sans-serif; /* Establecemos una fuente moderna y estilizada */
+  font-weight: 2000; /* Fuente más gruesa */
+  font-size: 2.5rem /* Tamaño más grande */ ;
+  color: #313232 !important;
+  text-align: center; /* Alineación centrada */
+  letter-spacing: 1px; /* Espaciado entre letras */
+
 }
 
 @media (min-width: 768px) {
@@ -126,10 +137,26 @@ button:active {
   background-color: #1976d2;
   color: #fff;
   width: 100%;
-  padding: 10px;
+  margin-top: 10px !important;
+  padding: 10px !important;
   text-transform: none;
   font-size: 16px;
   border-radius: 5px;
+}
+
+.back-button {
+  color: #1976d2;
+  margin-top: 5px !important;
+  border: 2px solid #1976d2;
+  &:hover {
+    background-color: #e9e7e9 !important;
+    color: #313131;
+  }
+  
+}
+
+.send-button {
+  margin-top: 20px !important;
 }
 
 .form-container {
@@ -162,4 +189,78 @@ button:active {
 .back-button {
   width: 100%;
   margin-top: 10px;
+}
+
+/* Aplica fondo blanco en navegadores basados en WebKit */
+input[type="text"],
+textarea,
+input:not([type="color"]) {
+    background-color: white; /* Asegura fondo blanco para inputs estándar */
+    caret-color: black; /* Cursor negro para contraste */
+}
+
+/* Para navegadores basados en WebKit */
+input[type="text"]::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+    color: #585858; /* Placeholder gris */
+}
+
+/* Para Firefox */
+input[type="text"]::-moz-placeholder,
+textarea::-moz-placeholder {
+    color: #585858; /* Placeholder gris */
+}
+
+/* Para Microsoft Edge e IE */
+input[type="text"]:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+    color: #585858; /* Placeholder gris */
+}
+
+.category-management-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  overflow: hidden; /* Evita el desplazamiento */
+  height: auto; /* Asegura que el tamaño del contenedor se ajuste al contenido */
+}
+
+.category-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem; /* Espaciado entre botones */
+}
+
+.category-buttons .MuiButton-containedPrimary {
+  background-color: #1976d2; /* Azul principal */
+}
+
+.category-buttons .MuiButton-containedPrimary:hover {
+  background-color: #115293; /* Azul oscuro en hover */
+}
+
+.category-buttons .MuiButton-outlinedPrimary {
+  border-color: #1976d2; /* Azul para el borde */
+  color: #1976d2; /* Azul para el texto */
+}
+
+.category-buttons .MuiButton-outlinedPrimary:hover {
+  border-color: #115293; /* Azul oscuro en hover */
+  color: #115293; /* Azul oscuro en hover */
+  background-color:#eae9e9
+}
+
+.category-buttons .MuiButton-containedSecondary {
+  background-color: #d32f2f; /* Rojo para eliminar */
+}
+
+.category-buttons .MuiButton-containedSecondary:hover {
+  background-color: #9a0007; /* Rojo oscuro en hover */
 }
