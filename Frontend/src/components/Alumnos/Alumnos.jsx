@@ -205,6 +205,7 @@ const Alumnos = () => {
 
   return (
     <Box className="inscripcion-box">
+      <Logout />
       <Typography variant="h4" component="h1" className="inscripcion-title">
         Inscripción a Clases
       </Typography>
