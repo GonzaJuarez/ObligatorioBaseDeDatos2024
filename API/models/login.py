@@ -6,7 +6,7 @@ from API.config.database import meta
 model_login = Table(
     "login", meta,
     Column("correo", String(100), ForeignKey("personas.correo"), primary_key=True),
-    Column("contraseña", String(150), nullable=False)
+    Column("contrasena", String(150), nullable=False)
     
 )
 

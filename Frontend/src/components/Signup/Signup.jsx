@@ -57,14 +57,14 @@ const Signup = () => {
             }
 
             // Crear el login para la persona
-            const loginResponse = await fetch('http://localhost:8000/login/confirm', {
+            const loginResponse = await fetch('http://localhost:8000/login/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     correo: formData.correo,
-                    contraseña: formData.password,
+                    contrasena: formData.password,
                 }),
             });
 
@@ -133,7 +133,7 @@ const Signup = () => {
                 </Box>
                 <Box className="form-field">
                     <TextField
-                        label="Contraseña"
+                        label="contraseña"
                         name="password"
                         variant="outlined"
                         type="password"

@@ -41,9 +41,9 @@ def insert_data():
         # Login Administrador
         connection.execute(
             text("""
-                REPLACE INTO login (ci, contraseña)
-                VALUES (:ci, :password)
-            """), {"ci": ADMIN_CI, "password": Hasher.get_password_hash(ADMIN_PASSWORD)})
+                REPLACE INTO login (correo, contrasena)
+                VALUES (:correo, :password)
+            """), {"correo": ADMIN_CORREO, "password": Hasher.get_password_hash(ADMIN_PASSWORD)})
 
         # Actividades
         connection.execute(text("REPLACE INTO actividades (descripcion, costo) VALUES ('Snowboard', 200)"))

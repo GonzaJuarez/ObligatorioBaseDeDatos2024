@@ -31,9 +31,9 @@ login = APIRouter()
 # Modelo de Pydantic para la solicitud de login
 class Login(BaseModel):
     correo: str
-    contraseña: str
+    contrasena: str
 
-# Funciones para manejar contraseñas
+# Funciones para manejar contrasenas
 class Hasher:
     @staticmethod
     def verify_password(plain_password, hashed_password):
@@ -50,6 +50,32 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
+# Endpoint para registrar un nuevo usuario
+@login.post("/login/register")
+def register_login(login_data: Login, db: Session = Depends(get_db)):
+    try:
+        # Verificar si el usuario ya existe
+        result = db.execute(
+            text("SELECT * FROM login WHERE correo = :correo"),
+            {"correo": login_data.correo}
+        ).fetchone()
+
+        if result:
+            raise HTTPException(status_code=400, detail="El usuario ya existe")
+
+        # Crear un nuevo usuario
+        db.execute(
+            text("INSERT INTO login (correo, contrasena) VALUES (:correo, :contrasena)"),
+            {"correo": login_data.correo, "contrasena": Hasher.hash_password(login_data.contrasena)}
+        )
+        db.commit()
+
+        return {"message": "Usuario registrado exitosamente"}
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=400, detail=str(e))
+
+
 # Endpoint para confirmar el login y generar un token JWT
 @login.post("/login/confirm")
 def confirm_login(login_data: Login, db: Session = Depends(get_db)):
@@ -63,9 +89,9 @@ def confirm_login(login_data: Login, db: Session = Depends(get_db)):
         if result is None:
             raise HTTPException(status_code=400, detail="Usuario no encontrado")
 
-        # Verificar la contraseña
-        if not Hasher.verify_password(login_data.contraseña, result.contraseña):
-            raise HTTPException(status_code=400, detail="Contraseña incorrecta")
+        # Verificar la contrasena
+        if not Hasher.verify_password(login_data.contrasena, result.contrasena):
+            raise HTTPException(status_code=400, detail="contrasena incorrecta")
 
         # Obtener información adicional del rol del usuario
         persona_result = db.execute(

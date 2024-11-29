@@ -18,7 +18,7 @@ const Login = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ correo, contraseña: password }),
+                body: JSON.stringify({ correo, contrasena: password }),
             });
 
             if (!response.ok) {
@@ -66,7 +66,7 @@ const Login = () => {
                     </Box>
                     <Box className="form-field">
                         <TextField
-                            label="Contraseña"
+                            label="contraseña"
                             variant="outlined"
                             type="password"
                             fullWidth
